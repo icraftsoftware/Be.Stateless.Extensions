@@ -6,7 +6,6 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile Condition=" '$(DelaySign)' == 'true' ">..\..\build\be.stateless.public.snk</AssemblyOriginatorKeyFile>
     <AssemblyOriginatorKeyFile Condition=" '$(DelaySign)' == 'false' ">..\..\build\be.stateless.snk</AssemblyOriginatorKeyFile>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 
     <Major Condition=" '$(Major)' == '' ">2</Major>
     <Minor Condition=" '$(Minor)' == '' ">0</Minor>
