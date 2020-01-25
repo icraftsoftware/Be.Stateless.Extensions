@@ -14,13 +14,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <!-- https://github.com/ctaggart/SourceLink/issues/276 -->
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-    <DebugType>portable</DebugType>
-    <SourceLinkCreate>true</SourceLinkCreate>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <GeneratePackageOnBuild Condition=" '$(GeneratePackageOnBuild)' == '' ">false</GeneratePackageOnBuild>
     <PackageId>$(AssemblyTitle)</PackageId>
     <PackageDescription>$(Description)</PackageDescription>
