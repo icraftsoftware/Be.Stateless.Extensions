@@ -1,4 +1,4 @@
-<!-- see https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build?view=vs-2019 -->
+<!-- see https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build -->
 <Project>
 
   <PropertyGroup>
