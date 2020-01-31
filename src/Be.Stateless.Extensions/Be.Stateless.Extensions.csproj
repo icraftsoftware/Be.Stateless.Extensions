@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.0;netcoreapp2.2;net472</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.2;net472</TargetFrameworks>
     <RootNamespace>Be.Stateless</RootNamespace>
     <AssemblyTitle>Be.Stateless.Extensions</AssemblyTitle>
     <Description>Extension methods for general purpose .NET development.</Description>
