@@ -19,6 +19,7 @@
 using System;
 using System.IO;
 
+#pragma warning disable CA1720 // Identifier contains type name
 namespace Be.Stateless.Extensions
 {
 	public static class StringExtensions
@@ -34,6 +35,7 @@ namespace Be.Stateless.Extensions
 		/// </param>
 		public static void IfNotNullOrEmpty(this string @string, Action<string> action)
 		{
+			if (action == null) throw new ArgumentNullException(nameof(action));
 			if (!@string.IsNullOrEmpty()) action(@string);
 		}
 
@@ -56,6 +58,7 @@ namespace Be.Stateless.Extensions
 		/// </returns>
 		public static TR IfNotNullOrEmpty<TR>(this string @string, Func<string, TR> function)
 		{
+			if (function == null) throw new ArgumentNullException(nameof(function));
 			return @string.IsNullOrEmpty() ? default : function(@string);
 		}
 
@@ -70,6 +73,7 @@ namespace Be.Stateless.Extensions
 		/// </param>
 		public static void IfNotNullOrWhiteSpace(this string @string, Action<string> action)
 		{
+			if (action == null) throw new ArgumentNullException(nameof(action));
 			if (!@string.IsNullOrWhiteSpace()) action(@string);
 		}
 
@@ -92,6 +96,7 @@ namespace Be.Stateless.Extensions
 		/// </returns>
 		public static TR IfNotNullOrWhiteSpace<TR>(this string @string, Func<string, TR> function)
 		{
+			if (function == null) throw new ArgumentNullException(nameof(function));
 			return @string.IsNullOrWhiteSpace() ? default : function(@string);
 		}
 
@@ -183,3 +188,4 @@ namespace Be.Stateless.Extensions
 		}
 	}
 }
+#pragma warning restore CA1720 // Identifier contains type name

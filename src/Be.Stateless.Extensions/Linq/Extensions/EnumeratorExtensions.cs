@@ -16,6 +16,7 @@
 
 #endregion
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -38,6 +39,7 @@ namespace Be.Stateless.Linq.Extensions
 		/// </returns>
 		public static IEnumerable<TResult> Cast<TResult>(this IEnumerator source)
 		{
+			if (source == null) throw new ArgumentNullException(nameof(source));
 			while (source.MoveNext())
 			{
 				yield return (TResult) source.Current;

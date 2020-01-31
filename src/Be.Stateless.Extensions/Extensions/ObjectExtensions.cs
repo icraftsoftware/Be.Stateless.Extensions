@@ -18,6 +18,7 @@
 
 using System;
 
+#pragma warning disable CA1720 // Identifier contains type name
 namespace Be.Stateless.Extensions
 {
 	public static class ObjectExtensions
@@ -36,6 +37,7 @@ namespace Be.Stateless.Extensions
 		/// </param>
 		public static void IfNotNull<T>(this T @object, Action<T> action) where T : class
 		{
+			if (action == null) throw new ArgumentNullException(nameof(action));
 			if (@object != null) action(@object);
 		}
 
@@ -61,7 +63,9 @@ namespace Be.Stateless.Extensions
 		/// </returns>
 		public static TR IfNotNull<T, TR>(this T @object, Func<T, TR> function) where T : class
 		{
+			if (function == null) throw new ArgumentNullException(nameof(function));
 			return @object == null ? default : function(@object);
 		}
 	}
 }
+#pragma warning restore CA1720 // Identifier contains type name
