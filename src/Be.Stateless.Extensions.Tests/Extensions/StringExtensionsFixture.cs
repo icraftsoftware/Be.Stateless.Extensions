@@ -37,17 +37,6 @@ namespace Be.Stateless.Extensions
 		}
 
 		[Fact]
-		public void IfNotNullOrEmptyInvokesActionDelegate()
-		{
-			var @string = "anything";
-			var mock = new Mock<Action<string>>();
-
-			@string.IfNotNullOrEmpty(mock.Object);
-
-			mock.Verify(a => a.Invoke(@string), Times.Once);
-		}
-
-		[Fact]
 		public void IfNotNullOrEmptyDoesNotInvokeFunctionDelegate()
 		{
 			var @string = string.Empty;
@@ -57,6 +46,17 @@ namespace Be.Stateless.Extensions
 			@string.IfNotNullOrEmpty(mock.Object).Should().BeFalse();
 
 			mock.Verify(a => a.Invoke(@string), Times.Never);
+		}
+
+		[Fact]
+		public void IfNotNullOrEmptyInvokesActionDelegate()
+		{
+			var @string = "anything";
+			var mock = new Mock<Action<string>>();
+
+			@string.IfNotNullOrEmpty(mock.Object);
+
+			mock.Verify(a => a.Invoke(@string), Times.Once);
 		}
 
 		[Fact]
@@ -83,17 +83,6 @@ namespace Be.Stateless.Extensions
 		}
 
 		[Fact]
-		public void IfNotNullOrWhiteSpaceInvokesActionDelegate()
-		{
-			var @string = "anything";
-			var mock = new Mock<Action<string>>();
-
-			@string.IfNotNullOrWhiteSpace(mock.Object);
-
-			mock.Verify(a => a.Invoke(@string), Times.Once);
-		}
-
-		[Fact]
 		public void IfNotNullOrWhiteSpaceDoesNotInvokeFunctionDelegate()
 		{
 			var @string = "   ";
@@ -106,6 +95,17 @@ namespace Be.Stateless.Extensions
 		}
 
 		[Fact]
+		public void IfNotNullOrWhiteSpaceInvokesActionDelegate()
+		{
+			var @string = "anything";
+			var mock = new Mock<Action<string>>();
+
+			@string.IfNotNullOrWhiteSpace(mock.Object);
+
+			mock.Verify(a => a.Invoke(@string), Times.Once);
+		}
+
+		[Fact]
 		public void IfNotNullOrWhiteSpaceInvokesFunctionDelegate()
 		{
 			var @string = "anything";
@@ -115,21 +115,6 @@ namespace Be.Stateless.Extensions
 			@string.IfNotNullOrWhiteSpace(mock.Object).Should().BeTrue();
 
 			mock.Verify(a => a.Invoke(@string), Times.Once);
-		}
-
-		[Theory]
-		[InlineData("Exclusive", Range.Exclusive)]
-		[InlineData("EXCLUSIVE", Range.Exclusive)]
-		public void ParseEnumLabel(string value, Enum expected)
-		{
-			value.Parse<Range>().Should().Be(expected);
-		}
-
-		[Fact]
-		public void ParseEnumThrowsWhenLabelIsUnknown()
-		{
-			Action act = () => "Unknown".Parse<Range>();
-			act.Should().Throw<ArgumentException>().WithMessage("Requested value 'Unknown' was not found.");
 		}
 
 		[Theory]
@@ -150,6 +135,21 @@ namespace Be.Stateless.Extensions
 		public void IsValidFileNameReturnsTrue(string @string)
 		{
 			@string.IsValidFileName().Should().BeTrue();
+		}
+
+		[Theory]
+		[InlineData("Exclusive", Range.Exclusive)]
+		[InlineData("EXCLUSIVE", Range.Exclusive)]
+		public void ParseEnumLabel(string value, Enum expected)
+		{
+			value.Parse<Range>().Should().Be(expected);
+		}
+
+		[Fact]
+		public void ParseEnumThrowsWhenLabelIsUnknown()
+		{
+			Action act = () => "Unknown".Parse<Range>();
+			act.Should().Throw<ArgumentException>().WithMessage("Requested value 'Unknown' was not found.");
 		}
 
 		[Theory]
