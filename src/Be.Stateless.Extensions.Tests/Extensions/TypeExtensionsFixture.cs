@@ -46,7 +46,7 @@ namespace Be.Stateless.Extensions
 		[InlineData(typeof(Dummy), typeof(NoDummy), true)]
 		[InlineData(typeof(Dummy), typeof(IHalfDummy<>), true)]
 		[InlineData(typeof(HalfDummy<>), typeof(IHalfDummy<>), true)]
-		[InlineData(typeof(IHalfDummy<>), typeof(IHalfDummy<>), false)]
+		[InlineData(typeof(IHalfDummy<>), typeof(IHalfDummy<>), false)] // TODO should be false and must be fixed
 		[InlineData(typeof(IHalfDummy<int>), typeof(IHalfDummy<>), true)]
 		public void IsSubclassOfGenericType(Type actual, Type baseType, bool result)
 		{
