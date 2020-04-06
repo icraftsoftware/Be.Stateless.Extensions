@@ -20,6 +20,7 @@ using System;
 using FluentAssertions;
 using Moq;
 using Xunit;
+using Range = Moq.Range;
 
 namespace Be.Stateless.Extensions
 {
