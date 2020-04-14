@@ -1,0 +1,15 @@
+trigger: none
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: icraftsoftware/Be.Stateless.Build.Agent.Yaml.Pipeline.Templates
+      endpoint: github.com_icraftsoftware
+
+extends:
+    template: Templates/manual-release.yml@templates
+    parameters:
+        ProjectOrSolutionPath: '$(Build.SourcesDirectory)/Be.Stateless.Extensions.sln'
+        Major: 2
+        Minor: 0

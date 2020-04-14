@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common.msbuild", "Common.ms
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{977C69AF-95DD-490D-863B-B02DC04C86E3}"
 	ProjectSection(SolutionItems) = preProject
+		azure-continuous-integration-pipeline.yml = azure-continuous-integration-pipeline.yml
+		azure-manual-release-pipelines.yml = azure-manual-release-pipelines.yml
 		build\be.stateless.public.snk = build\be.stateless.public.snk
 		build\build.ps1 = build\build.ps1
 	EndProjectSection
