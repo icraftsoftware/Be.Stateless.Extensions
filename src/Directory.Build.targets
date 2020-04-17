@@ -17,4 +17,5 @@
 
 -->
 <Project>
+  <Import Project="$(MSBuildThisFileDirectory)../.build/Directory.Build.targets" />
 </Project>
