@@ -4,7 +4,7 @@
     <TargetFrameworks>netcoreapp3.0;net48</TargetFrameworks>
     <RootNamespace>Be.Stateless</RootNamespace>
     <AssemblyTitle>Be.Stateless.Extensions.Tests</AssemblyTitle>
-    <Description>Unit testing of extension methods for general purpose .NET development.</Description>
+    <Description>Unit tests for extension methods for general purpose .NET development.</Description>
   </PropertyGroup>
 
   <ItemGroup>
