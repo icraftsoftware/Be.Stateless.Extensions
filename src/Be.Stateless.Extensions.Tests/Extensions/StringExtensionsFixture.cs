@@ -166,5 +166,16 @@ namespace Be.Stateless.Extensions
 		{
 			@string.SubstringEx(length).Should().Be(expected);
 		}
+
+		[Theory]
+		[InlineData(null, "")]
+		[InlineData("", "")]
+		[InlineData("123456", "123456")]
+		[InlineData("TonyStark", "tonyStark")]
+		[InlineData("Pepperpots", "pepperpots")]
+		public void ToCamelCase(string @string, string expected)
+		{
+			@string.ToCamelCase().Should().Be(expected);
+		}
 	}
 }

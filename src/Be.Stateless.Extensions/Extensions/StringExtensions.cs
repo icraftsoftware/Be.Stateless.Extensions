@@ -17,11 +17,13 @@
 #endregion
 
 using System;
+using System.Globalization;
 using System.IO;
+using static System.Char;
 
-#pragma warning disable CA1720 // Identifier contains type name
 namespace Be.Stateless.Extensions
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name")]
 	public static class StringExtensions
 	{
 		/// <summary>
@@ -186,6 +188,21 @@ namespace Be.Stateless.Extensions
 					? @string.Substring(startIndex)
 					: @string.Substring(0, length);
 		}
+
+		/// <summary>
+		/// Converts a Pascal-case string to a camel-case one.
+		/// </summary>
+		/// <param name="string">
+		/// A Pascal-case string.
+		/// </param>
+		/// <returns>
+		/// The camel-case equivalent string.
+		/// </returns>
+		public static string ToCamelCase(this string @string)
+		{
+			return @string.IsNullOrEmpty()
+				? string.Empty
+				: ToLower(@string[0], CultureInfo.InvariantCulture) + @string.Substring(1);
+		}
 	}
 }
-#pragma warning restore CA1720 // Identifier contains type name
