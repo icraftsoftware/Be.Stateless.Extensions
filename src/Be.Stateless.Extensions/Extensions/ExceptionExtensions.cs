@@ -17,12 +17,14 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace Be.Stateless.Extensions
 {
+	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
 	public static class ExceptionExtensions
 	{
 		/// <summary>
@@ -35,6 +37,7 @@ namespace Be.Stateless.Extensions
 		/// <c>true</c> if <paramref name="exception"/> is fatal; <c>false</c> otherwise.
 		/// </returns>
 		/// <seealso href="http://vasters.com/clemensv/2012/09/06/Are+You+Catching+Falling+Knives.aspx"/>
+		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
 		public static bool IsFatal(this Exception exception)
 		{
 			while (exception != null)

@@ -52,7 +52,7 @@ namespace Be.Stateless.Extensions
 		[Fact]
 		public void IfNotNullOrEmptyInvokesActionDelegate()
 		{
-			var @string = "anything";
+			const string @string = "anything";
 			var mock = new Mock<Action<string>>();
 
 			@string.IfNotNullOrEmpty(mock.Object);
@@ -63,7 +63,7 @@ namespace Be.Stateless.Extensions
 		[Fact]
 		public void IfNotNullOrEmptyInvokesFunctionDelegate()
 		{
-			var @string = "anything";
+			const string @string = "anything";
 			var mock = new Mock<Func<string, bool>>();
 			mock.Setup(f => f.Invoke(@string)).Returns(true);
 
@@ -75,7 +75,7 @@ namespace Be.Stateless.Extensions
 		[Fact]
 		public void IfNotNullOrWhiteSpaceDoesNotInvokeActionDelegate()
 		{
-			var @string = "   ";
+			const string @string = "   ";
 			var mock = new Mock<Action<string>>();
 
 			@string.IfNotNullOrWhiteSpace(mock.Object);
@@ -86,7 +86,7 @@ namespace Be.Stateless.Extensions
 		[Fact]
 		public void IfNotNullOrWhiteSpaceDoesNotInvokeFunctionDelegate()
 		{
-			var @string = "   ";
+			const string @string = "   ";
 			var mock = new Mock<Func<string, bool>>();
 			mock.Setup(f => f.Invoke(@string)).Returns(true);
 
@@ -98,7 +98,7 @@ namespace Be.Stateless.Extensions
 		[Fact]
 		public void IfNotNullOrWhiteSpaceInvokesActionDelegate()
 		{
-			var @string = "anything";
+			const string @string = "anything";
 			var mock = new Mock<Action<string>>();
 
 			@string.IfNotNullOrWhiteSpace(mock.Object);
@@ -109,7 +109,7 @@ namespace Be.Stateless.Extensions
 		[Fact]
 		public void IfNotNullOrWhiteSpaceInvokesFunctionDelegate()
 		{
-			var @string = "anything";
+			const string @string = "anything";
 			var mock = new Mock<Func<string, bool>>();
 			mock.Setup(f => f.Invoke(@string)).Returns(true);
 
@@ -172,7 +172,7 @@ namespace Be.Stateless.Extensions
 		[InlineData("", "")]
 		[InlineData("123456", "123456")]
 		[InlineData("TonyStark", "tonyStark")]
-		[InlineData("Pepperpots", "pepperpots")]
+		[InlineData("PepperPotts", "pepperPotts")]
 		public void ToCamelCase(string @string, string expected)
 		{
 			@string.ToCamelCase().Should().Be(expected);

@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Be.Stateless.Linq
 {
@@ -41,6 +42,7 @@ namespace Be.Stateless.Linq
 	{
 		public LambdaComparer(Func<T, T, bool> comparer) : this(comparer, o => 0) { }
 
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
 		public LambdaComparer(Func<T, T, bool> comparer, Func<T, int> hasher)
 		{
 			_comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));

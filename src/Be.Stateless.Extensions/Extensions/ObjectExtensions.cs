@@ -17,10 +17,13 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 #pragma warning disable CA1720 // Identifier contains type name
 namespace Be.Stateless.Extensions
 {
+	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
+	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
 	public static class ObjectExtensions
 	{
 		/// <summary>
