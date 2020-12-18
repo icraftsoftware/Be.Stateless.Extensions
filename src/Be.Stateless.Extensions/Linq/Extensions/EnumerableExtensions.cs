@@ -93,7 +93,7 @@ namespace Be.Stateless.Linq.Extensions
 			if (source == null) throw new ArgumentNullException(nameof(source));
 			foreach (var element in source)
 			{
-				action(element);
+				action?.Invoke(element);
 			}
 		}
 
@@ -116,7 +116,7 @@ namespace Be.Stateless.Linq.Extensions
 			var index = 0;
 			foreach (var element in source)
 			{
-				action(index++, element);
+				action?.Invoke(index++, element);
 			}
 		}
 	}

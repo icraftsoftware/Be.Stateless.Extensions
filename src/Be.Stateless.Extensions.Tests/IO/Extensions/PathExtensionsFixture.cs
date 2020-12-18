@@ -1,0 +1,77 @@
+﻿#region Copyright & License
+
+// Copyright © 2012 - 2020 François Chabot
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#endregion
+
+using System.Diagnostics.CodeAnalysis;
+using FluentAssertions;
+using Xunit;
+
+namespace Be.Stateless.IO.Extensions
+{
+	public class PathExtensionsFixture
+	{
+		[Fact]
+		public void CommonFolderPath()
+		{
+			var paths = new[] { @"c:\a\b/c\d\e\f", "c:/a/b/c/d/k", "c:/a/b/c" };
+			paths.GetCommonPath().Should().Be(@"c:\a\b\c");
+		}
+
+		[Fact]
+		public void CommonPath()
+		{
+			var paths = new[] { "a.b.c.d.e.f", "a.b.c.d.k", "a.b.c" };
+			paths.GetCommonPath('.').Should().Be("a.b.c");
+		}
+
+		[Fact]
+		public void CommonPathNonexistent()
+		{
+			var paths = new[] { "a.b.c.d.e.f", "a.b.c.d.k", "a.b.c", "x.y.z" };
+			paths.GetCommonPath('.').Should().BeEmpty();
+		}
+
+		[Fact]
+		public void CommonPathNonexistentToo()
+		{
+			var paths = new[] { "a.b.c.d.e.f", "x.y.z", "m.n.o.p" };
+			paths.GetCommonPath('.').Should().BeEmpty();
+		}
+
+		[Fact]
+		public void CommonPathOfEmptyArray()
+		{
+			var paths = new string[0];
+			paths.GetCommonPath('.').Should().BeEmpty();
+		}
+
+		[Fact]
+		[SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
+		public void CommonPathOfNullArray()
+		{
+			string[] paths = null;
+			paths.GetCommonPath('.').Should().BeEmpty();
+		}
+
+		[Fact]
+		public void CommonPathOfSingletonArray()
+		{
+			var paths = new[] { "a.b.c.d.e.f" };
+			paths.GetCommonPath('.').Should().Be("a.b.c.d.e.f");
+		}
+	}
+}
