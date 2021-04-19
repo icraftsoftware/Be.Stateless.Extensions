@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -42,17 +42,17 @@ namespace Be.Stateless.Extensions
 		{
 			while (exception != null)
 			{
-				if (exception is OutOfMemoryException && !(exception is InsufficientMemoryException)
-					|| exception is AccessViolationException
-					|| exception is BadImageFormatException
-					|| exception is SEHException
-					|| exception is StackOverflowException
-					|| exception is ThreadAbortException)
+				if (exception is OutOfMemoryException and not InsufficientMemoryException
+					or AccessViolationException
+					or BadImageFormatException
+					or SEHException
+					or StackOverflowException
+					or ThreadAbortException)
 				{
 					return true;
 				}
 
-				if (!(exception is TypeInitializationException) && !(exception is TargetInvocationException))
+				if (exception is not TypeInitializationException and not TargetInvocationException)
 				{
 					break;
 				}

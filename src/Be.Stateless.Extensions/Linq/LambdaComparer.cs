@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ namespace Be.Stateless.Linq
 	/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.equalitycomparer-1"/>
 	public class LambdaComparer<T> : EqualityComparer<T>
 	{
-		public LambdaComparer(Func<T, T, bool> comparer) : this(comparer, o => 0) { }
+		public LambdaComparer(Func<T, T, bool> comparer) : this(comparer, _ => 0) { }
 
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
 		public LambdaComparer(Func<T, T, bool> comparer, Func<T, int> hasher)

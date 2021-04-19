@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ using System;
 using FluentAssertions;
 using Moq;
 using Xunit;
+using static FluentAssertions.FluentActions;
 using Range = Moq.Range;
 
 namespace Be.Stateless.Extensions
@@ -141,7 +142,7 @@ namespace Be.Stateless.Extensions
 		[Theory]
 		[InlineData("Exclusive", Range.Exclusive)]
 		[InlineData("EXCLUSIVE", Range.Exclusive)]
-		public void ParseEnumLabel(string value, Enum expected)
+		public void ParseEnumLabel(string value, Range expected)
 		{
 			value.Parse<Range>().Should().Be(expected);
 		}
@@ -149,8 +150,7 @@ namespace Be.Stateless.Extensions
 		[Fact]
 		public void ParseEnumThrowsWhenLabelIsUnknown()
 		{
-			Action act = () => "Unknown".Parse<Range>();
-			act.Should().Throw<ArgumentException>().WithMessage("Requested value 'Unknown' was not found.");
+			Invoking(() => "Unknown".Parse<Range>()).Should().Throw<ArgumentException>().WithMessage("Requested value 'Unknown' was not found.");
 		}
 
 		[Theory]

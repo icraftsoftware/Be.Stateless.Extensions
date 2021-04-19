@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,28 +29,28 @@ namespace Be.Stateless.Linq
 		public void EqualityWithCustomComparison()
 		{
 			var sut = new LambdaComparer<Tuple<int, int>>((t1, t2) => t1.Item1 == t2.Item1, t => t.GetHashCode());
-			sut.Equals(new Tuple<int, int>(1, 2), new Tuple<int, int>(1, 3)).Should().BeTrue();
+			sut.Equals(new(1, 2), new(1, 3)).Should().BeTrue();
 		}
 
 		[Fact]
 		public void EqualityWithDefaultComparison()
 		{
 			var sut = EqualityComparer<Tuple<int, int>>.Default;
-			sut.Equals(new Tuple<int, int>(1, 2), new Tuple<int, int>(1, 3)).Should().BeFalse();
+			sut.Equals(new(1, 2), new(1, 3)).Should().BeFalse();
 		}
 
 		[Fact]
 		public void HashCodeWithCustomComputation()
 		{
 			var sut = new LambdaComparer<Tuple<int, int>>((t1, t2) => t1.Item1 == t2.Item1, t => t.GetHashCode());
-			sut.GetHashCode(new Tuple<int, int>(1, 2)).Should().Be(EqualityComparer<Tuple<int, int>>.Default.GetHashCode(new Tuple<int, int>(1, 2)));
+			sut.GetHashCode(new(1, 2)).Should().Be(EqualityComparer<Tuple<int, int>>.Default.GetHashCode(new(1, 2)));
 		}
 
 		[Fact]
 		public void HashCodeWithDefaultComputation()
 		{
 			var sut = new LambdaComparer<Tuple<int, int>>((t1, t2) => t1.Item1 == t2.Item1);
-			sut.GetHashCode(new Tuple<int, int>(1, 2)).Should().Be(0);
+			sut.GetHashCode(new(1, 2)).Should().Be(0);
 		}
 	}
 }

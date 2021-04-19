@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 #endregion
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using Xunit;
@@ -55,7 +56,7 @@ namespace Be.Stateless.IO.Extensions
 		[Fact]
 		public void CommonPathOfEmptyArray()
 		{
-			var paths = new string[0];
+			var paths = Array.Empty<string>();
 			paths.GetCommonPath('.').Should().BeEmpty();
 		}
 
