@@ -18,9 +18,11 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using FluentAssertions;
 using Moq;
 using Xunit;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.Linq.Extensions
 {
@@ -98,6 +100,60 @@ namespace Be.Stateless.Linq.Extensions
 			actionMock.Verify(a => a.Invoke(0, source[0]));
 			actionMock.Verify(a => a.Invoke(1, source[1]));
 			actionMock.Verify(a => a.Invoke(2, source[2]));
+		}
+
+		[Fact]
+		public void Single()
+		{
+			Invoking(
+					() => Enumerable.Empty<int>().Single(
+						() => new InvalidOperationException("Custom lazy message for no element."),
+						() => new InvalidOperationException("Custom lazy message for more than one element.")))
+				.Should().Throw<InvalidOperationException>()
+				.WithMessage("Custom lazy message for no element.");
+
+			Invoking(
+					() => new[] { 1, 2, 3 }.Single(
+						() => new InvalidOperationException("Custom lazy message for no element."),
+						() => new InvalidOperationException("Custom lazy message for more than one element.")))
+				.Should().Throw<InvalidOperationException>()
+				.WithMessage("Custom lazy message for more than one element.");
+		}
+
+		[Fact]
+		public void SingleOrDefault()
+		{
+			Invoking(() => new[] { 1, 2, 3 }.SingleOrDefault(() => new InvalidOperationException("Custom lazy message for more than one element.")))
+				.Should().Throw<InvalidOperationException>()
+				.WithMessage("Custom lazy message for more than one element.");
+		}
+
+		[Fact]
+		public void SingleOrDefaultWithPredicate()
+		{
+			Invoking(() => new[] { 1, 2, 3 }.SingleOrDefault(i => i % 2 == 1, () => new InvalidOperationException("More than one odd number.")))
+				.Should().Throw<InvalidOperationException>()
+				.WithMessage("More than one odd number.");
+		}
+
+		[Fact]
+		public void SingleWithPredicate()
+		{
+			Invoking(
+					() => Enumerable.Empty<int>().Single(
+						i => i % 2 == 1,
+						() => new InvalidOperationException("No odd number."),
+						() => new InvalidOperationException("More than one odd number.")))
+				.Should().Throw<InvalidOperationException>()
+				.WithMessage("No odd number.");
+
+			Invoking(
+					() => new[] { 1, 2, 3 }.Single(
+						i => i % 2 == 1,
+						() => new InvalidOperationException("No odd number."),
+						() => new InvalidOperationException("More than one odd number.")))
+				.Should().Throw<InvalidOperationException>()
+				.WithMessage("More than one odd number.");
 		}
 	}
 }

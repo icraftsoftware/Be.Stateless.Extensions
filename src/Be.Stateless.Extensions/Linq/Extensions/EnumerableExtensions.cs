@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ using System.Linq;
 
 namespace Be.Stateless.Linq.Extensions
 {
+	[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
 	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
 	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
 	public static class EnumerableExtensions
@@ -118,6 +119,118 @@ namespace Be.Stateless.Linq.Extensions
 			{
 				action?.Invoke(index++, element);
 			}
+		}
+
+		/// <summary>
+		/// Returns the only element of a sequence, and throws an exception if there is not exactly one element in the sequence.
+		/// </summary>
+		/// <typeparam name="TSource">
+		/// </typeparam>
+		/// <param name="source">
+		/// An <see cref="IEnumerable{T}"/> to return the single element of.
+		/// </param>
+		/// <param name="noElementExceptionFactory">
+		/// The exception to throw if the input sequence contains no element.
+		/// </param>
+		/// <param name="moreThanOneElementExceptionFactory">
+		/// The exception to throw if the input sequence contains more than one element.
+		/// </param>
+		/// <returns>
+		/// The single element of the input sequence.
+		/// </returns>
+		public static TSource Single<TSource>(this IEnumerable<TSource> source, Func<Exception> noElementExceptionFactory, Func<Exception> moreThanOneElementExceptionFactory)
+		{
+			if (noElementExceptionFactory == null) throw new ArgumentNullException(nameof(noElementExceptionFactory));
+			if (moreThanOneElementExceptionFactory == null) throw new ArgumentNullException(nameof(moreThanOneElementExceptionFactory));
+			using (var enumerator = source.GetEnumerator())
+			{
+				if (!enumerator.MoveNext()) throw noElementExceptionFactory();
+				var single = enumerator.Current;
+				return enumerator.MoveNext() ? throw moreThanOneElementExceptionFactory() : single;
+			}
+		}
+
+		/// <summary>
+		/// Returns the only element of a sequence that satisfies a specified condition, and throws an exception if more than one
+		/// such element exists.
+		/// </summary>
+		/// <typeparam name="TSource">
+		/// A function to test an element for a condition.
+		/// </typeparam>
+		/// <param name="source">
+		/// An <see cref="IEnumerable{T}"/> to return the single element of.
+		/// </param>
+		/// <param name="predicate">
+		/// A function to test an element for a condition.
+		/// </param>
+		/// <param name="noElementExceptionFactory">
+		/// The exception to throw if the input sequence contains no element that satisfies the condition.
+		/// </param>
+		/// <param name="moreThanOneElementExceptionFactory">
+		/// The exception to throw if the input sequence contains more than one element that satisfies the condition.
+		/// </param>
+		/// <returns>
+		/// The single element of the input sequence that satisfies a condition.
+		/// </returns>
+		public static TSource Single<TSource>(
+			this IEnumerable<TSource> source,
+			Func<TSource, bool> predicate,
+			Func<Exception> noElementExceptionFactory,
+			Func<Exception> moreThanOneElementExceptionFactory)
+		{
+			return source.Where(predicate).Single(noElementExceptionFactory, moreThanOneElementExceptionFactory);
+		}
+
+		/// <summary>
+		/// Returns the only element of a sequence, or a default value if the sequence is empty; this method throws an exception
+		/// if there is more than one element in the sequence.
+		/// </summary>
+		/// <typeparam name="TSource">
+		/// The type of the elements of source.
+		/// </typeparam>
+		/// <param name="source">
+		/// An <see cref="IEnumerable{T}"/> to return the single element of.
+		/// </param>
+		/// <param name="moreThanOneElementExceptionFactory">
+		/// The exception to throw if the input sequence contains more than one element.
+		/// </param>
+		/// <returns>
+		/// The single element of the input sequence, or default(TSource) if the sequence contains no elements.
+		/// </returns>
+		public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source, Func<Exception> moreThanOneElementExceptionFactory)
+		{
+			if (moreThanOneElementExceptionFactory == null) throw new ArgumentNullException(nameof(moreThanOneElementExceptionFactory));
+			using (var enumerator = source.GetEnumerator())
+			{
+				if (!enumerator.MoveNext()) return default;
+				var single = enumerator.Current;
+				return enumerator.MoveNext() ? throw moreThanOneElementExceptionFactory() : single;
+			}
+		}
+
+		/// <summary>
+		/// Returns the only element of a sequence that satisfies a specified condition or a default value if no such element
+		/// exists; this method throws an exception if more than one element satisfies the condition.
+		/// </summary>
+		/// <typeparam name="TSource">
+		/// The type of the elements of source.
+		/// </typeparam>
+		/// <param name="source">
+		/// An <see cref="IEnumerable{T}"/> to return the single element of.
+		/// </param>
+		/// <param name="predicate">
+		/// A function to test an element for a condition.
+		/// </param>
+		/// <param name="moreThanOneElementExceptionFactory">
+		/// The exception to throw if the input sequence contains more than one element that satisfies the condition.
+		/// </param>
+		/// <returns>
+		/// The single element of the input sequence that satisfies the condition, or default(TSource) if no such element is
+		/// found.
+		/// </returns>
+		public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, Func<Exception> moreThanOneElementExceptionFactory)
+		{
+			return source.Where(predicate).SingleOrDefault(moreThanOneElementExceptionFactory);
 		}
 	}
 }
