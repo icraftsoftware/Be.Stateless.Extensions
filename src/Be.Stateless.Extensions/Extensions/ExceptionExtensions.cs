@@ -19,6 +19,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -36,7 +37,7 @@ namespace Be.Stateless.Extensions
 		/// <returns>
 		/// <c>true</c> if <paramref name="exception"/> is fatal; <c>false</c> otherwise.
 		/// </returns>
-		/// <seealso href="http://vasters.com/clemensv/2012/09/06/Are+You+Catching+Falling+Knives.aspx"/>
+		/// <seealso href="https://vasters.com/archive/Are-You-Catching-Falling-Knives.html"/>
 		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
 		public static bool IsFatal(this Exception exception)
 		{
@@ -61,6 +62,21 @@ namespace Be.Stateless.Extensions
 			}
 
 			return false;
+		}
+
+		/// <summary>
+		/// Rethrows an <paramref name="exception"/>, maintaining the original Watson information and augmenting rather than
+		/// replacing the original stack trace.
+		/// </summary>
+		/// <param name="exception">
+		/// The exception to be rethrown.
+		/// </param>
+		/// <seealso cref="ExceptionDispatchInfo.Capture">ExceptionDispatchInfo.Capture</seealso>
+		/// <seealso cref="ExceptionDispatchInfo.Throw">ExceptionDispatchInfo.Throw</seealso>
+		/// <seealso href="https://stackoverflow.com/a/17091351/1789441">How to rethrow InnerException without losing stack trace in C#?</seealso>
+		public static void Rethrow(this Exception exception)
+		{
+			ExceptionDispatchInfo.Capture(exception).Throw();
 		}
 	}
 }
