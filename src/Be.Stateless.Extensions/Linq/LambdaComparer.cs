@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,8 +32,8 @@ namespace Be.Stateless.Linq
 	/// <remarks>
 	/// It is recommended to derive from the <see cref="EqualityComparer{T}"/> class instead of implementing the <see
 	/// cref="IEqualityComparer{T}"/> interface, because the <see cref="EqualityComparer{T}"/> class tests for equality using
-	/// the <see cref="IEquatable{T}"/>.<see cref="IEquatable{T}.Equals(T)"/> method instead of the <see cref="object"/>.<see
-	/// cref="object.Equals(object)"/> method.
+	/// the <see cref="IEquatable{T}.Equals(T)">IEquatable&lt;T&gt;.Equals(T)</see> method instead of the <see
+	/// cref="object.Equals(object)">Object.Equals(object)</see> method.
 	/// </remarks>
 	/// <seealso href="http://brendan.enrick.com/blog/linq-your-collections-with-iequalitycomparer-and-lambda-expressions/"/>
 	/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.iequalitycomparer-1"/>
