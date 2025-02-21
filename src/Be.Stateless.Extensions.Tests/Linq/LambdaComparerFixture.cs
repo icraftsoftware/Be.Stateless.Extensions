@@ -1,6 +1,6 @@
-﻿#region Copyright & License
+#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2025 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,39 +18,67 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using Xunit;
 
-namespace Be.Stateless.Linq
+namespace Be.Stateless.Linq;
+
+public class LambdaComparerFixture
 {
-	public class LambdaComparerFixture
+#pragma warning disable CS0618 // Type or member is obsolete
+	[Fact]
+	[SuppressMessage("ReSharper", "NullableWarningSuppressionIsUsed")]
+	public void EqualityWithCustomComparison()
 	{
-		[Fact]
-		public void EqualityWithCustomComparison()
-		{
-			var sut = new LambdaComparer<Tuple<int, int>>((t1, t2) => t1.Item1 == t2.Item1, t => t.GetHashCode());
-			sut.Equals(new(1, 2), new(1, 3)).Should().BeTrue();
-		}
+		var sut1 = new LambdaComparer<Tuple<int, int>>(static (t1, t2) => t1!.Item1 == t2!.Item1, static t => t.GetHashCode());
+		sut1.Equals(new Tuple<int, int>(item1: 1, item2: 2), new Tuple<int, int>(item1: 1, item2: 3))
+			.Should()
+			.BeTrue();
 
-		[Fact]
-		public void EqualityWithDefaultComparison()
-		{
-			var sut = EqualityComparer<Tuple<int, int>>.Default;
-			sut.Equals(new(1, 2), new(1, 3)).Should().BeFalse();
-		}
-
-		[Fact]
-		public void HashCodeWithCustomComputation()
-		{
-			var sut = new LambdaComparer<Tuple<int, int>>((t1, t2) => t1.Item1 == t2.Item1, t => t.GetHashCode());
-			sut.GetHashCode(new(1, 2)).Should().Be(EqualityComparer<Tuple<int, int>>.Default.GetHashCode(new(1, 2)));
-		}
-
-		[Fact]
-		public void HashCodeWithDefaultComputation()
-		{
-			var sut = new LambdaComparer<Tuple<int, int>>((t1, t2) => t1.Item1 == t2.Item1);
-			sut.GetHashCode(new(1, 2)).Should().Be(0);
-		}
+		var sut2 = EqualityComparer<Tuple<int, int>>.Create(static (t1, t2) => t1!.Item1 == t2!.Item1, static t => t.GetHashCode());
+		sut2.Equals(new Tuple<int, int>(item1: 1, item2: 2), new Tuple<int, int>(item1: 1, item2: 3))
+			.Should()
+			.BeTrue();
 	}
+
+	[Fact]
+	public void EqualityWithDefaultComparison()
+	{
+		var sut = EqualityComparer<Tuple<int, int>>.Default;
+		sut.Equals(new Tuple<int, int>(item1: 1, item2: 2), new Tuple<int, int>(item1: 1, item2: 3))
+			.Should()
+			.BeFalse();
+	}
+
+	[Fact]
+	[SuppressMessage("ReSharper", "NullableWarningSuppressionIsUsed")]
+	public void HashCodeWithCustomComputation()
+	{
+		var sut1 = new LambdaComparer<Tuple<int, int>>(static (t1, t2) => t1!.Item1 == t2!.Item1, static t => t.GetHashCode());
+		sut1.GetHashCode(new Tuple<int, int>(item1: 1, item2: 2))
+			.Should()
+			.Be(EqualityComparer<Tuple<int, int>>.Default.GetHashCode(new Tuple<int, int>(item1: 1, item2: 2)));
+
+		var sut2 = EqualityComparer<Tuple<int, int>>.Create(static (t1, t2) => t1!.Item1 == t2!.Item1, static t => t.GetHashCode());
+		sut2.GetHashCode(new Tuple<int, int>(item1: 1, item2: 2))
+			.Should()
+			.Be(EqualityComparer<Tuple<int, int>>.Default.GetHashCode(new Tuple<int, int>(item1: 1, item2: 2)));
+	}
+
+	[Fact]
+	[SuppressMessage("ReSharper", "NullableWarningSuppressionIsUsed")]
+	public void HashCodeWithDefaultComputation()
+	{
+		var sut1 = new LambdaComparer<Tuple<int, int>>(static (t1, t2) => t1!.Item1 == t2!.Item1);
+		sut1.GetHashCode(new Tuple<int, int>(item1: 1, item2: 2))
+			.Should()
+			.Be(expected: 0);
+
+		var sut2 = EqualityComparer<Tuple<int, int>>.Create(static (t1, t2) => t1!.Item1 == t2!.Item1, static _ => 0);
+		sut2.GetHashCode(new Tuple<int, int>(item1: 1, item2: 2))
+			.Should()
+			.Be(expected: 0);
+	}
+#pragma warning disable CS0618 // Type or member is obsolete
 }

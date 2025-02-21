@@ -1,6 +1,6 @@
-﻿#region Copyright & License
+#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2025 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,32 +21,25 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Be.Stateless.Linq.Extensions
+namespace Be.Stateless.Linq.Extensions;
+
+[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
+public static class EnumeratorExtensions
 {
-	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
-	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
-	public static class EnumeratorExtensions
+	/// <summary>Casts the elements of an <see cref="IEnumerator"/> to the specified type.</summary>
+	/// <typeparam name="TResult">The type to cast the elements of source to.</typeparam>
+	/// <param name="source">
+	/// The <see cref="IEnumerator"/> that contains the elements to be cast to type <typeparamref name="TResult"/>
+	/// .
+	/// </param>
+	/// <returns>
+	/// An <see cref="IEnumerable{T}"/> that contains each element of the <paramref name="source"/> sequence cast to the
+	/// specified type.
+	/// </returns>
+	public static IEnumerable<TResult?> Cast<TResult>(this IEnumerator source)
 	{
-		/// <summary>
-		/// Casts the elements of an <see cref="IEnumerator"/> to the specified type.
-		/// </summary>
-		/// <typeparam name="TResult">
-		/// The type to cast the elements of source to.
-		/// </typeparam>
-		/// <param name="source">
-		/// The <see cref="IEnumerator"/> that contains the elements to be cast to type <typeparamref name="TResult"/>.
-		/// </param>
-		/// <returns>
-		/// An <see cref="IEnumerable{T}"/> that contains each element of the <paramref name="source"/> sequence cast to the
-		/// specified type.
-		/// </returns>
-		public static IEnumerable<TResult> Cast<TResult>(this IEnumerator source)
-		{
-			if (source == null) throw new ArgumentNullException(nameof(source));
-			while (source.MoveNext())
-			{
-				yield return (TResult) source.Current;
-			}
-		}
+		ArgumentNullException.ThrowIfNull(source);
+		while (source.MoveNext()) yield return (TResult) source.Current;
 	}
 }

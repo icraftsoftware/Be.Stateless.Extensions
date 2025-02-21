@@ -1,6 +1,6 @@
-﻿#region Copyright & License
+#region Copyright & License
 
-// Copyright © 2012 - 2022 François Chabot
+// Copyright © 2012 - 2025 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,50 +20,42 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Be.Stateless.Linq
+namespace Be.Stateless.Linq;
+
+/// <summary>
+/// Provides a <see cref="IEqualityComparer{T}"/> wrapper that delegates to lambdas that support the comparison of objects
+/// for equality.
+/// </summary>
+/// <typeparam name="T">The type of objects to compare.</typeparam>
+/// <remarks>
+/// It is recommended to derive from the <see cref="EqualityComparer{T}"/> class instead of implementing the
+/// <see cref="IEqualityComparer{T}"/> interface, because the <see cref="EqualityComparer{T}"/> class tests for equality using the
+/// <see cref="IEquatable{T}.Equals(T)">IEquatable&lt;T&gt;.Equals(T)</see> method instead of the
+/// <see cref="object.Equals(object)">Object.Equals(object)</see> method.
+/// </remarks>
+/// <seealso href="http://brendan.enrick.com/blog/linq-your-collections-with-iequalitycomparer-and-lambda-expressions/"/>
+/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.iequalitycomparer-1"/>
+/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.equalitycomparer-1"/>
+[Obsolete("Use static factory System.Collections.Generic.EqualityComparer<T>.Create() instead.")]
+[method: SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
+public class LambdaComparer<T>(Func<T?, T?, bool> comparer, Func<T, int>? hasher) : EqualityComparer<T>
 {
-	/// <summary>
-	/// Provides a <see cref="IEqualityComparer{T}"/> wrapper that delegates to lambdas that support the comparison of objects
-	/// for equality.
-	/// </summary>
-	/// <typeparam name="T">
-	/// The type of objects to compare.
-	/// </typeparam>
-	/// <remarks>
-	/// It is recommended to derive from the <see cref="EqualityComparer{T}"/> class instead of implementing the <see
-	/// cref="IEqualityComparer{T}"/> interface, because the <see cref="EqualityComparer{T}"/> class tests for equality using
-	/// the <see cref="IEquatable{T}.Equals(T)">IEquatable&lt;T&gt;.Equals(T)</see> method instead of the <see
-	/// cref="object.Equals(object)">Object.Equals(object)</see> method.
-	/// </remarks>
-	/// <seealso href="http://brendan.enrick.com/blog/linq-your-collections-with-iequalitycomparer-and-lambda-expressions/"/>
-	/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.iequalitycomparer-1"/>
-	/// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.equalitycomparer-1"/>
-	public class LambdaComparer<T> : EqualityComparer<T>
+	public LambdaComparer(Func<T?, T?, bool> comparer) : this(comparer, static _ => 0) { }
+
+	#region Base Class Member Overrides
+
+	public override bool Equals(T? x, T? y)
 	{
-		public LambdaComparer(Func<T, T, bool> comparer) : this(comparer, _ => 0) { }
-
-		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
-		public LambdaComparer(Func<T, T, bool> comparer, Func<T, int> hasher)
-		{
-			_comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
-			_hasher = hasher ?? throw new ArgumentNullException(nameof(hasher));
-		}
-
-		#region Base Class Member Overrides
-
-		public override bool Equals(T x, T y)
-		{
-			return _comparer(x, y);
-		}
-
-		public override int GetHashCode(T obj)
-		{
-			return _hasher(obj);
-		}
-
-		#endregion
-
-		private readonly Func<T, T, bool> _comparer;
-		private readonly Func<T, int> _hasher;
+		return _comparer(x, y);
 	}
+
+	public override int GetHashCode(T obj)
+	{
+		return _hasher(obj);
+	}
+
+	#endregion
+
+	private readonly Func<T?, T?, bool> _comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
+	private readonly Func<T, int> _hasher = hasher ?? throw new ArgumentNullException(nameof(hasher));
 }

@@ -1,6 +1,6 @@
-﻿#region Copyright & License
+#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2025 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,58 +21,91 @@ using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using Xunit;
 
-namespace Be.Stateless.IO.Extensions
+namespace Be.Stateless.IO.Extensions;
+
+public class PathExtensionsFixture
 {
-	public class PathExtensionsFixture
+	[Fact]
+	public void CommonFolderPath()
 	{
-		[Fact]
-		public void CommonFolderPath()
-		{
-			var paths = new[] { @"c:\a\b/c\d\e\f", "c:/a/b/c/d/k", "c:/a/b/c" };
-			paths.GetCommonPath().Should().Be(@"c:\a\b\c");
-		}
+		var paths = new[] {
+			@"c:\a\b/c\d\e\f",
+			"c:/a/b/c/d/k",
+			"c:/a/b/c"
+		};
+		paths.GetCommonPath()
+			.Should()
+			.Be(@"c:\a\b\c");
+	}
 
-		[Fact]
-		public void CommonPath()
-		{
-			var paths = new[] { "a.b.c.d.e.f", "a.b.c.d.k", "a.b.c" };
-			paths.GetCommonPath('.').Should().Be("a.b.c");
-		}
+	[Fact]
+	public void CommonPath()
+	{
+		var paths = new[] {
+			"a.b.c.d.e.f",
+			"a.b.c.d.k",
+			"a.b.c"
+		};
+		paths.GetCommonPath('.')
+			.Should()
+			.Be("a.b.c");
+	}
 
-		[Fact]
-		public void CommonPathNonexistent()
-		{
-			var paths = new[] { "a.b.c.d.e.f", "a.b.c.d.k", "a.b.c", "x.y.z" };
-			paths.GetCommonPath('.').Should().BeEmpty();
-		}
+	[Fact]
+	public void CommonPathNonexistent()
+	{
+		var paths = new[] {
+			"a.b.c.d.e.f",
+			"a.b.c.d.k",
+			"a.b.c",
+			"x.y.z"
+		};
+		paths.GetCommonPath('.')
+			.Should()
+			.BeEmpty();
+	}
 
-		[Fact]
-		public void CommonPathNonexistentToo()
-		{
-			var paths = new[] { "a.b.c.d.e.f", "x.y.z", "m.n.o.p" };
-			paths.GetCommonPath('.').Should().BeEmpty();
-		}
+	[Fact]
+	public void CommonPathNonexistentToo()
+	{
+		var paths = new[] {
+			"a.b.c.d.e.f",
+			"x.y.z",
+			"m.n.o.p"
+		};
+		paths.GetCommonPath('.')
+			.Should()
+			.BeEmpty();
+	}
 
-		[Fact]
-		public void CommonPathOfEmptyArray()
-		{
-			var paths = Array.Empty<string>();
-			paths.GetCommonPath('.').Should().BeEmpty();
-		}
+	[Fact]
+	public void CommonPathOfEmptyArray()
+	{
+		var paths = Array.Empty<string>();
+		paths.GetCommonPath('.')
+			.Should()
+			.BeEmpty();
+	}
 
-		[Fact]
-		[SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
-		public void CommonPathOfNullArray()
-		{
-			string[] paths = null;
-			paths.GetCommonPath('.').Should().BeEmpty();
-		}
+	[Fact]
+	[SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
+	[SuppressMessage("ReSharper", "NullableWarningSuppressionIsUsed")]
+	public void CommonPathOfNullArray()
+	{
+		string[] paths = null!;
+		paths.GetCommonPath('.')
+			.Should()
+			.BeEmpty();
+	}
 
-		[Fact]
-		public void CommonPathOfSingletonArray()
-		{
-			var paths = new[] { "a.b.c.d.e.f" };
-			paths.GetCommonPath('.').Should().Be("a.b.c.d.e.f");
-		}
+	[Fact]
+	public void CommonPathOfSingletonArray()
+	{
+		var paths = new[] {
+			"a.b.c.d.e.f"
+		};
+		paths.GetCommonPath('.')
+			.Should()
+			.Be("a.b.c.d.e.f");
 	}
 }

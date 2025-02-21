@@ -1,6 +1,6 @@
-﻿#region Copyright & License
+#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2025 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,56 +22,61 @@ using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace Be.Stateless.Extensions
+namespace Be.Stateless.Extensions;
+
+public class ObjectExtensionsFixture
 {
-	public class ObjectExtensionsFixture
+	[Fact]
+	[SuppressMessage("ReSharper", "NullableWarningSuppressionIsUsed")]
+	public void IfNotNullDoesNotInvokeActionDelegate()
 	{
-		[Fact]
-		[SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
-		public void IfNotNullDoesNotInvokeActionDelegate()
-		{
-			object @object = null;
-			var actionMock = new Mock<Action<object>>();
+		object @object = null!;
+		var actionMock = new Mock<Action<object>>();
 
-			@object.IfNotNull(actionMock.Object);
+		@object.IfNotNull(actionMock.Object);
 
-			actionMock.Verify(a => a.Invoke(@object), Times.Never);
-		}
+		actionMock.Verify(a => a.Invoke(@object), Times.Never);
+	}
 
-		[Fact]
-		[SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
-		public void IfNotNullDoesNotInvokeFunctionDelegate()
-		{
-			object @object = null;
-			var actionMock = new Mock<Func<object, bool>>();
-			actionMock.Setup(f => f.Invoke(@object)).Returns(true);
+	[Fact]
+	[SuppressMessage("ReSharper", "NullableWarningSuppressionIsUsed")]
+	public void IfNotNullDoesNotInvokeFunctionDelegate()
+	{
+		object @object = null!;
+		var actionMock = new Mock<Func<object, bool>>();
+		actionMock.Setup(f => f.Invoke(@object))
+			.Returns(value: true);
 
-			@object.IfNotNull(actionMock.Object).Should().BeFalse();
+		@object.IfNotNull(actionMock.Object)
+			.Should()
+			.BeFalse();
 
-			actionMock.Verify(f => f.Invoke(@object), Times.Never);
-		}
+		actionMock.Verify(f => f.Invoke(@object), Times.Never);
+	}
 
-		[Fact]
-		public void IfNotNullInvokesActionDelegate()
-		{
-			var @object = new object();
-			var actionMock = new Mock<Action<object>>();
+	[Fact]
+	public void IfNotNullInvokesActionDelegate()
+	{
+		var @object = new object();
+		var actionMock = new Mock<Action<object>>();
 
-			@object.IfNotNull(actionMock.Object);
+		@object.IfNotNull(actionMock.Object);
 
-			actionMock.Verify(a => a.Invoke(@object), Times.Once);
-		}
+		actionMock.Verify(a => a.Invoke(@object), Times.Once);
+	}
 
-		[Fact]
-		public void IfNotNullInvokesFunctionDelegate()
-		{
-			var @object = new object();
-			var actionMock = new Mock<Func<object, bool>>();
-			actionMock.Setup(f => f.Invoke(@object)).Returns(true);
+	[Fact]
+	public void IfNotNullInvokesFunctionDelegate()
+	{
+		var @object = new object();
+		var actionMock = new Mock<Func<object, bool>>();
+		actionMock.Setup(f => f.Invoke(@object))
+			.Returns(value: true);
 
-			@object.IfNotNull(actionMock.Object).Should().BeTrue();
+		@object.IfNotNull(actionMock.Object)
+			.Should()
+			.BeTrue();
 
-			actionMock.Verify(f => f.Invoke(@object), Times.Once);
-		}
+		actionMock.Verify(f => f.Invoke(@object), Times.Once);
 	}
 }

@@ -1,4 +1,4 @@
-﻿<!-- see https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build -->
+<!-- see https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build -->
 <!--
 
   Copyright © 2012 - 2020 François Chabot
@@ -17,5 +17,5 @@
 
 -->
 <Project>
-  <Import Project="$(MSBuildThisFileDirectory)../.build/Directory.Build.targets" />
+   <Import Project="$(MSBuildThisFileDirectory)../.build/Directory.Build.targets"/>
 </Project>

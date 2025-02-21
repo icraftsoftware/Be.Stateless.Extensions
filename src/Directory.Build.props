@@ -1,7 +1,7 @@
-﻿<!-- see https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build -->
+<!-- see https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build -->
 <!--
 
-  Copyright © 2012 - 2022 François Chabot
+  Copyright © 2012 - 2024 François Chabot
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 
 -->
 <Project>
-  <PropertyGroup>
-    <Major>2</Major>
-    <Minor>1</Minor>
-  </PropertyGroup>
-  <Import Project="$(MSBuildThisFileDirectory)../.build/Directory.Build.props" />
+   <PropertyGroup>
+      <Major>3</Major>
+      <Minor>0</Minor>
+   </PropertyGroup>
+   <Import Project="$(MSBuildThisFileDirectory)../.build/Directory.Build.props"/>
 </Project>

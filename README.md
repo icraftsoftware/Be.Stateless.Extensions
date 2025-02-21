@@ -1,4 +1,4 @@
-﻿# Be.Stateless.Extensions
+# Be.Stateless.Extensions
 
 ##### Build Pipelines
 

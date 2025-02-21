@@ -1,0 +1,133 @@
+<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/CodeStyle/CodeCleanup/Profiles/=Enhanced_0020Full_0020Cleanup/@EntryIndexedValue"><![CDATA[<Profile name="Enhanced Full Cleanup">
+  <AspOptimizeRegisterDirectives>True</AspOptimizeRegisterDirectives>
+  <CppAddTypenameTemplateKeywords>True</CppAddTypenameTemplateKeywords>
+  <CppMakeVariableConstexpr>True</CppMakeVariableConstexpr>
+  <CppDeleteRedundantAccessSpecifier>True</CppDeleteRedundantAccessSpecifier>
+  <CppRemoveCastDescriptor>True</CppRemoveCastDescriptor>
+  <CppRedundantDereferences>True</CppRedundantDereferences>
+  <CppRemoveElseKeyword>True</CppRemoveElseKeyword>
+  <CppShortenQualifiedName>True</CppShortenQualifiedName>
+  <CppDeleteRedundantSpecifier>True</CppDeleteRedundantSpecifier>
+  <CppRemoveStatement>True</CppRemoveStatement>
+  <CppDeleteRedundantTypenameTemplateKeywords>True</CppDeleteRedundantTypenameTemplateKeywords>
+  <CppCStyleToStaticCastDescriptor>True</CppCStyleToStaticCastDescriptor>
+  <CppReplaceExpressionWithBooleanConst>True</CppReplaceExpressionWithBooleanConst>
+  <CppMakeIfConstexpr>True</CppMakeIfConstexpr>
+  <CppMakePostfixOperatorPrefix>True</CppMakePostfixOperatorPrefix>
+  <CppChangeSmartPointerToMakeFunction>True</CppChangeSmartPointerToMakeFunction>
+  <CppReplaceThrowWithRethrowFix>True</CppReplaceThrowWithRethrowFix>
+  <CppTypeTraitAliasDescriptor>True</CppTypeTraitAliasDescriptor>
+  <CppRemoveRedundantConditionalExpressionDescriptor>True</CppRemoveRedundantConditionalExpressionDescriptor>
+  <CppSimplifyConditionalExpressionDescriptor>True</CppSimplifyConditionalExpressionDescriptor>
+  <CppReplaceExpressionWithNullptr>True</CppReplaceExpressionWithNullptr>
+  <CppReplaceTieWithStructuredBindingDescriptor>True</CppReplaceTieWithStructuredBindingDescriptor>
+  <CppUseAssociativeContainsDescriptor>True</CppUseAssociativeContainsDescriptor>
+  <CppUseEraseAlgorithmDescriptor>True</CppUseEraseAlgorithmDescriptor>
+  <CppCodeStyleCleanupDescriptor ArrangeBraces="True" ArrangeAuto="True" ArrangeFunctionDeclarations="True" ArrangeNestedNamespaces="True" ArrangeTypeAliases="True" ArrangeCVQualifiers="True" ArrangeSlashesInIncludeDirectives="True" ArrangeOverridingFunctions="True" SortIncludeDirectives="True" SortMemberInitializers="True" />
+  <CppReformatCode>True</CppReformatCode>
+  <CSReorderTypeMembers>True</CSReorderTypeMembers>
+  <CSCodeStyleAttributes ArrangeVarStyle="True" ArrangeTypeAccessModifier="True" ArrangeTypeMemberAccessModifier="True" SortModifiers="True" ArrangeArgumentsStyle="True" RemoveRedundantParentheses="True" AddMissingParentheses="True" ArrangeBraces="True" ArrangeAttributes="True" ArrangeCodeBodyStyle="True" ArrangeTrailingCommas="True" ArrangeObjectCreation="True" ArrangeDefaultValue="True" ArrangeNamespaces="True" ArrangeNullCheckingPattern="True" />
+  <FSharpReformatCode>True</FSharpReformatCode>
+  <ShaderLabReformatCode>True</ShaderLabReformatCode>
+  <RemoveCodeRedundanciesVB>True</RemoveCodeRedundanciesVB>
+  <Xaml.RedundantFreezeAttribute>True</Xaml.RedundantFreezeAttribute>
+  <Xaml.RemoveRedundantModifiersAttribute>True</Xaml.RemoveRedundantModifiersAttribute>
+  <Xaml.RemoveRedundantNameAttribute>True</Xaml.RemoveRedundantNameAttribute>
+  <Xaml.RemoveRedundantResource>True</Xaml.RemoveRedundantResource>
+  <Xaml.RemoveRedundantCollectionProperty>True</Xaml.RemoveRedundantCollectionProperty>
+  <Xaml.RemoveRedundantAttachedPropertySetter>True</Xaml.RemoveRedundantAttachedPropertySetter>
+  <Xaml.RemoveRedundantStyledValue>True</Xaml.RemoveRedundantStyledValue>
+  <Xaml.RemoveRedundantNamespaceAlias>True</Xaml.RemoveRedundantNamespaceAlias>
+  <Xaml.RemoveForbiddenResourceName>True</Xaml.RemoveForbiddenResourceName>
+  <Xaml.RemoveRedundantGridDefinitionsAttribute>True</Xaml.RemoveRedundantGridDefinitionsAttribute>
+  <Xaml.RemoveRedundantUpdateSourceTriggerAttribute>True</Xaml.RemoveRedundantUpdateSourceTriggerAttribute>
+  <Xaml.RemoveRedundantBindingModeAttribute>True</Xaml.RemoveRedundantBindingModeAttribute>
+  <Xaml.RemoveRedundantGridSpanAttribut>True</Xaml.RemoveRedundantGridSpanAttribut>
+  <XMLReformatCode>True</XMLReformatCode>
+  <RemoveCodeRedundancies>True</RemoveCodeRedundancies>
+  <CSUseAutoProperty>True</CSUseAutoProperty>
+  <CSMakeFieldReadonly>True</CSMakeFieldReadonly>
+  <CSMakeAutoPropertyGetOnly>True</CSMakeAutoPropertyGetOnly>
+  <CSArrangeQualifiers>True</CSArrangeQualifiers>
+  <CSFixBuiltinTypeReferences>True</CSFixBuiltinTypeReferences>
+  <HtmlReformatCode>True</HtmlReformatCode>
+  <VBOptimizeImports>True</VBOptimizeImports>
+  <VBShortenReferences>True</VBShortenReferences>
+  <CSOptimizeUsings>
+    <OptimizeUsings>True</OptimizeUsings>
+  </CSOptimizeUsings>
+  <CSShortenReferences>True</CSShortenReferences>
+  <VBReformatCode>True</VBReformatCode>
+  <VBFormatDocComments>True</VBFormatDocComments>
+  <CSReformatCode>True</CSReformatCode>
+  <CSharpFormatDocComments>True</CSharpFormatDocComments>
+  <FormatAttributeQuoteDescriptor>True</FormatAttributeQuoteDescriptor>
+  <IDEA_SETTINGS>&lt;profile version=&quot;1.0&quot;&gt;
+      &lt;option name=&quot;myName&quot; value=&quot;Enhanced Full Cleanup&quot; /&gt;
+    &lt;/profile&gt;</IDEA_SETTINGS>
+  <RIDER_SETTINGS>&lt;profile&gt;
+      &lt;Language id=&quot;CSS&quot;&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+        &lt;Rearrange&gt;true&lt;/Rearrange&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;EditorConfig&quot;&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;HTML&quot;&gt;
+        &lt;OptimizeImports&gt;true&lt;/OptimizeImports&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+        &lt;Rearrange&gt;true&lt;/Rearrange&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;HTTP Request&quot;&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;Handlebars&quot;&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;Ini&quot;&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;JSON&quot;&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;Jade&quot;&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;JavaScript&quot;&gt;
+        &lt;OptimizeImports&gt;true&lt;/OptimizeImports&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+        &lt;Rearrange&gt;true&lt;/Rearrange&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;Markdown&quot;&gt;
+        &lt;Reformat&gt;false&lt;/Reformat&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;Properties&quot;&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;RELAX-NG&quot;&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;Razor&quot;&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;SQL&quot;&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;VueExpr&quot;&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;XML&quot;&gt;
+        &lt;OptimizeImports&gt;true&lt;/OptimizeImports&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+        &lt;Rearrange&gt;true&lt;/Rearrange&gt;
+      &lt;/Language&gt;
+      &lt;Language id=&quot;yaml&quot;&gt;
+        &lt;Reformat&gt;true&lt;/Reformat&gt;
+      &lt;/Language&gt;
+    &lt;/profile&gt;</RIDER_SETTINGS>
+  <CSReformatInactiveBranches>True</CSReformatInactiveBranches>
+  <UpgradedBackendToFrontendHtml>True</UpgradedBackendToFrontendHtml>
+  <CSUpdateFileHeader>True</CSUpdateFileHeader>
+  <CppUpdateFileHeader>True</CppUpdateFileHeader>
+</Profile>]]></s:String></wpf:ResourceDictionary>

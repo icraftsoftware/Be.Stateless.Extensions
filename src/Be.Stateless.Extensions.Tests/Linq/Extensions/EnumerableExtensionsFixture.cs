@@ -1,6 +1,6 @@
-﻿#region Copyright & License
+#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2025 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,142 +18,97 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using Xunit;
-using static FluentAssertions.FluentActions;
 
-namespace Be.Stateless.Linq.Extensions
+namespace Be.Stateless.Linq.Extensions;
+
+public class EnumerableExtensionsFixture
 {
-	public class EnumerableExtensionsFixture
+	[Fact]
+	[SuppressMessage("ReSharper", "CoVariantArrayConversion")]
+	public void Distinct()
 	{
-		[Fact]
-		[SuppressMessage("ReSharper", "CoVariantArrayConversion")]
-		public void Distinct()
-		{
-			var source = new[] {
-				new Tuple<int, int>(1, 2),
-				new Tuple<int, int>(2, 2),
-				new Tuple<int, int>(3, 2),
-				new Tuple<int, int>(4, 2)
-			};
+		(int, int)[] source = [(1, 2), (2, 2), (3, 2), (4, 2)];
 
-			// equality on Tuple.Item1
-			source.Distinct((t1, t2) => t1.Item1 == t2.Item1).Should().BeEquivalentTo(source);
-			// equality on Tuple.Item2
-			source.Distinct((t1, t2) => t1.Item2 == t2.Item2).Should().BeEquivalentTo(new[] { new Tuple<int, int>(1, 2) });
-		}
+		// equality on Tuple.Item1
+		source.Distinct(static (t1, t2) => t1.Item1 == t2.Item1)
+			.Should()
+			.BeEquivalentTo(source);
+		// equality on Tuple.Item2
+		source.Distinct(static (t1, t2) => t1.Item2 == t2.Item2)
+			.Should()
+			.BeEquivalentTo([(1, 2)]);
+	}
 
-		[Fact]
-		[SuppressMessage("ReSharper", "CoVariantArrayConversion")]
-		public void Except()
-		{
-			var first = new[] {
-				new Tuple<int, int>(1, 2),
-				new Tuple<int, int>(2, 3),
-				new Tuple<int, int>(3, 4),
-				new Tuple<int, int>(4, 5)
-			};
-			var second = new[] {
-				new Tuple<int, int>(1, 1),
-				new Tuple<int, int>(2, 1),
-				new Tuple<int, int>(3, 1),
-				new Tuple<int, int>(4, 1)
-			};
+	[Fact]
+	[SuppressMessage("ReSharper", "CoVariantArrayConversion")]
+	public void Except()
+	{
+		(int, int)[] one = [(1, 2), (2, 3), (3, 4), (4, 5)];
+		(int, int)[] two = [(1, 1), (2, 1), (3, 1), (4, 1)];
 
-			// equality on Tuple.Item1
-			first.Except(second, (t1, t2) => t1.Item1 == t2.Item1).Should().BeEmpty();
-			// equality on Tuple.Item2
-			first.Except(second, (t1, t2) => t1.Item2 == t2.Item2).Should().BeEquivalentTo(first);
-		}
+		// equality on Tuple.Item1
+		one.Except(two, static (t1, t2) => t1.Item1 == t2.Item1)
+			.Should()
+			.BeEmpty();
+		// equality on Tuple.Item2
+		one.Except(two, static (t1, t2) => t1.Item2 == t2.Item2)
+			.Should()
+			.BeEquivalentTo(one);
+	}
 
-		[Fact]
-		public void ForEach()
-		{
-			var source = new[] {
-				new Tuple<int, int>(1, 4),
-				new Tuple<int, int>(2, 5),
-				new Tuple<int, int>(3, 6)
-			};
-			var actionMock = new Mock<Action<Tuple<int, int>>>();
+	[Fact]
+	public void ForEach()
+	{
+		(int, int)[] source = [(1, 4), (2, 5), (3, 6)];
+		var actionMock = new Mock<Action<(int, int)>>();
 
-			source.ForEach(actionMock.Object);
+		source.ForEach(actionMock.Object);
 
-			actionMock.Verify(a => a.Invoke(source[0]));
-			actionMock.Verify(a => a.Invoke(source[1]));
-			actionMock.Verify(a => a.Invoke(source[2]));
-		}
+		actionMock.Verify(a => a.Invoke(source[0]));
+		actionMock.Verify(a => a.Invoke(source[1]));
+		actionMock.Verify(a => a.Invoke(source[2]));
+	}
 
-		[Fact]
-		public void ForEachIncorporatesElementIndex()
-		{
-			var source = new[] {
-				new Tuple<int, int>(1, 4),
-				new Tuple<int, int>(2, 5),
-				new Tuple<int, int>(3, 6)
-			};
-			var actionMock = new Mock<Action<int, Tuple<int, int>>>();
+	[Fact]
+	public async Task ForEachAsync()
+	{
+		(int, int)[] source = [(1, 4), (2, 5), (3, 6)];
+		var actionMock = new Mock<Func<(int, int), Task>>();
 
-			source.ForEach(actionMock.Object);
+		await source.ForEachAsync(actionMock.Object);
 
-			actionMock.Verify(a => a.Invoke(0, source[0]));
-			actionMock.Verify(a => a.Invoke(1, source[1]));
-			actionMock.Verify(a => a.Invoke(2, source[2]));
-		}
+		actionMock.Verify(a => a.Invoke(source[0]));
+		actionMock.Verify(a => a.Invoke(source[1]));
+		actionMock.Verify(a => a.Invoke(source[2]));
+	}
 
-		[Fact]
-		public void Single()
-		{
-			Invoking(
-					() => Enumerable.Empty<int>().Single(
-						() => new InvalidOperationException("Custom lazy message for no element."),
-						() => new InvalidOperationException("Custom lazy message for more than one element.")))
-				.Should().Throw<InvalidOperationException>()
-				.WithMessage("Custom lazy message for no element.");
+	[Fact]
+	public async Task ForEachAsyncIncorporatesElementIndex()
+	{
+		(int, int)[] source = [(1, 4), (2, 5), (3, 6)];
+		var actionMock = new Mock<Func<int, (int, int), Task>>();
 
-			Invoking(
-					() => new[] { 1, 2, 3 }.Single(
-						() => new InvalidOperationException("Custom lazy message for no element."),
-						() => new InvalidOperationException("Custom lazy message for more than one element.")))
-				.Should().Throw<InvalidOperationException>()
-				.WithMessage("Custom lazy message for more than one element.");
-		}
+		await source.ForEachAsync(actionMock.Object);
 
-		[Fact]
-		public void SingleOrDefault()
-		{
-			Invoking(() => new[] { 1, 2, 3 }.SingleOrDefault(() => new InvalidOperationException("Custom lazy message for more than one element.")))
-				.Should().Throw<InvalidOperationException>()
-				.WithMessage("Custom lazy message for more than one element.");
-		}
+		actionMock.Verify(a => a.Invoke(0, source[0]));
+		actionMock.Verify(a => a.Invoke(1, source[1]));
+		actionMock.Verify(a => a.Invoke(2, source[2]));
+	}
 
-		[Fact]
-		public void SingleOrDefaultWithPredicate()
-		{
-			Invoking(() => new[] { 1, 2, 3 }.SingleOrDefault(i => i % 2 == 1, () => new InvalidOperationException("More than one odd number.")))
-				.Should().Throw<InvalidOperationException>()
-				.WithMessage("More than one odd number.");
-		}
+	[Fact]
+	public void ForEachIncorporatesElementIndex()
+	{
+		(int, int)[] source = [(1, 4), (2, 5), (3, 6)];
+		var actionMock = new Mock<Action<int, (int, int)>>();
 
-		[Fact]
-		public void SingleWithPredicate()
-		{
-			Invoking(
-					() => Enumerable.Empty<int>().Single(
-						i => i % 2 == 1,
-						() => new InvalidOperationException("No odd number."),
-						() => new InvalidOperationException("More than one odd number.")))
-				.Should().Throw<InvalidOperationException>()
-				.WithMessage("No odd number.");
+		source.ForEach(actionMock.Object);
 
-			Invoking(
-					() => new[] { 1, 2, 3 }.Single(
-						i => i % 2 == 1,
-						() => new InvalidOperationException("No odd number."),
-						() => new InvalidOperationException("More than one odd number.")))
-				.Should().Throw<InvalidOperationException>()
-				.WithMessage("More than one odd number.");
-		}
+		actionMock.Verify(a => a.Invoke(0, source[0]));
+		actionMock.Verify(a => a.Invoke(1, source[1]));
+		actionMock.Verify(a => a.Invoke(2, source[2]));
 	}
 }

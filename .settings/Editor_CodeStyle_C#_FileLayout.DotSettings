@@ -1,0 +1,335 @@
+<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/CodeStyle/CSharpFileLayoutPatterns/Pattern/@EntryValue"><![CDATA[<Patterns xmlns="urn:schemas-jetbrains-com:member-reordering-patterns">
+  <TypePattern Priority="0" DisplayName="COM interfaces or structs">
+    <TypePattern.Match>
+      <Or>
+        <And>
+          <Kind Is="Interface" />
+          <Or>
+            <HasAttribute Name="System.Runtime.InteropServices.InterfaceTypeAttribute" />
+            <HasAttribute Name="System.Runtime.InteropServices.ComImport" />
+          </Or>
+        </And>
+        <Kind Is="Struct" />
+      </Or>
+    </TypePattern.Match>
+  </TypePattern>
+  <TypePattern Priority="0" DisplayName="NUnit Test Fixtures" RemoveRegions="All">
+    <TypePattern.Match>
+      <And>
+        <Kind Is="Class" />
+        <Or>
+          <HasAttribute Name="NUnit.Framework.TestFixtureAttribute" Inherited="True" />
+          <HasAttribute Name="NUnit.Framework.TestCaseFixtureAttribute" Inherited="True" />
+        </Or>
+      </And>
+    </TypePattern.Match>
+    <Region Name="Setup/Teardown">
+      <Entry DisplayName="Setup/Teardown Methods">
+        <Entry.Match>
+          <And>
+            <Kind Is="Method" />
+            <Or>
+              <HasAttribute Name="NUnit.Framework.SetUpAttribute" Inherited="True" />
+              <HasAttribute Name="NUnit.Framework.TearDownAttribute" Inherited="True" />
+              <HasAttribute Name="NUnit.Framework.OneTimeSetUpAttribute" />
+              <HasAttribute Name="NUnit.Framework.TestFixtureSetUpAttribute" Inherited="True" />
+              <HasAttribute Name="NUnit.Framework.OneTimeTearDownAttribute" />
+              <HasAttribute Name="NUnit.Framework.TestFixtureTearDownAttribute" Inherited="True" />
+            </Or>
+          </And>
+        </Entry.Match>
+      </Entry>
+    </Region>
+    <Entry DisplayName="Test Methods" Priority="100">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <HasAttribute Name="NUnit.Framework.TestAttribute" />
+        </And>
+      </Entry.Match>
+      <Entry.SortBy>
+        <Name />
+      </Entry.SortBy>
+    </Entry>
+    <Entry DisplayName="All other members" />
+    <Entry DisplayName="Static Fields and Constants">
+      <Entry.Match>
+        <Or>
+          <Kind Is="Constant" />
+          <And>
+            <Kind Is="Field" />
+            <Static />
+          </And>
+        </Or>
+      </Entry.Match>
+      <Entry.SortBy>
+        <Kind Is="Member" />
+        <Name />
+      </Entry.SortBy>
+    </Entry>
+  </TypePattern>
+  <TypePattern Priority="0" DisplayName="XUnit Test Fixtures" RemoveRegions="All">
+    <TypePattern.Match>
+      <And>
+        <Kind Is="Class" />
+        <HasMember>
+          <And>
+            <Kind Is="Method" />
+            <Or>
+              <HasAttribute Name="Xunit.FactAttribute" />
+              <HasAttribute Name="Xunit.TheoryAttribute" />
+              <HasAttribute Name="Xunit.SkippableFactAttribute" />
+              <HasAttribute Name="Xunit.SkippableTheoryAttribute" />
+            </Or>
+          </And>
+        </HasMember>
+      </And>
+    </TypePattern.Match>
+    <Region Name="Setup/Teardown">
+      <Entry DisplayName="Setup Constructors">
+        <Entry.Match>
+          <Kind Is="Constructor" />
+        </Entry.Match>
+      </Entry>
+      <Entry DisplayName="Teardown Methods">
+        <Entry.Match>
+          <And>
+            <Kind Is="Method" />
+            <ImplementsInterface Name="IDisposable" />
+          </And>
+        </Entry.Match>
+      </Entry>
+    </Region>
+    <Entry DisplayName="Test Method" Priority="100">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <Or>
+            <HasAttribute Name="Xunit.FactAttribute" />
+            <HasAttribute Name="Xunit.TheoryAttribute" />
+            <HasAttribute Name="Xunit.SkippableFactAttribute" />
+            <HasAttribute Name="Xunit.SkippableTheoryAttribute" />
+          </Or>
+        </And>
+      </Entry.Match>
+      <Entry.SortBy>
+        <Name />
+      </Entry.SortBy>
+    </Entry>
+    <Entry DisplayName="All Other Members" />
+    <Entry DisplayName="Static Fields or Constants" Priority="100">
+      <Entry.Match>
+        <Or>
+          <Kind Is="Constant" />
+          <And>
+            <Kind Is="Field" />
+            <Static />
+          </And>
+        </Or>
+      </Entry.Match>
+      <Entry.SortBy>
+        <Kind Is="Member" />
+        <Name />
+      </Entry.SortBy>
+    </Entry>
+  </TypePattern>
+  <TypePattern Priority="0" DisplayName="Default Pattern">
+    <Region Name="Nested Type: ${1}">
+      <Region.GroupBy>
+        <Access />
+        <Name />
+      </Region.GroupBy>
+      <Entry DisplayName="Nested Types">
+        <Entry.Match>
+          <Kind Is="Type" />
+        </Entry.Match>
+        <Entry.SortBy>
+          <Access Order="Public Protected ProtectedInternal Internal Private" />
+          <Name />
+        </Entry.SortBy>
+      </Entry>
+    </Region>
+    <Region Name="${1} Enum" Priority="100">
+      <Region.GroupBy>
+        <Access />
+        <Name />
+      </Region.GroupBy>
+      <Entry DisplayName="Enums">
+        <Entry.Match>
+          <Kind Is="Enum" />
+        </Entry.Match>
+        <Entry.SortBy>
+          <Access Order="Public Protected ProtectedInternal Internal Private" />
+          <Name />
+        </Entry.SortBy>
+      </Entry>
+    </Region>
+    <Region Name="Operators">
+      <Entry DisplayName="Operators">
+        <Entry.Match>
+          <Kind Is="Operator" />
+        </Entry.Match>
+        <Entry.SortBy>
+          <Name />
+        </Entry.SortBy>
+      </Entry>
+    </Region>
+    <Entry DisplayName="Static Constructors">
+      <Entry.Match>
+        <And>
+          <Static />
+          <Kind Is="Constructor" />
+        </And>
+      </Entry.Match>
+    </Entry>
+    <Entry DisplayName="Static Factories">
+      <Entry.Match>
+        <And>
+          <Static />
+          <Kind Is="Method" />
+          <Name Is="Create.*" />
+        </And>
+      </Entry.Match>
+      <Entry.SortBy>
+        <Access Order="Public Protected ProtectedInternal Internal Private" />
+        <Name />
+      </Entry.SortBy>
+    </Entry>
+    <Entry DisplayName="Static Properties">
+      <Entry.Match>
+        <And>
+          <Static />
+          <Kind Is="Property" />
+        </And>
+      </Entry.Match>
+      <Entry.SortBy>
+        <Name />
+      </Entry.SortBy>
+    </Entry>
+    <Entry DisplayName="Static Methods">
+      <Entry.Match>
+        <And>
+          <Static />
+          <Kind Is="Method" />
+        </And>
+      </Entry.Match>
+    </Entry>
+    <Entry DisplayName="Instance Constructors">
+      <Entry.Match>
+        <And>
+          <Not>
+            <Static />
+          </Not>
+          <Kind Is="Constructor" />
+        </And>
+      </Entry.Match>
+    </Entry>
+    <Entry DisplayName="Finalizer">
+      <Entry.Match>
+        <Kind Is="Destructor" />
+      </Entry.Match>
+    </Entry>
+    <Region Name="${0} Members">
+      <Region.GroupBy>
+        <ImplementsInterface Immediate="True" />
+      </Region.GroupBy>
+      <Entry DisplayName="Interface Members">
+        <Entry.Match>
+          <And>
+            <Kind Is="Member" />
+            <ImplementsInterface />
+          </And>
+        </Entry.Match>
+        <Entry.SortBy>
+          <ImplementsInterface Immediate="True" />
+        </Entry.SortBy>
+      </Entry>
+    </Region>
+    <Region Name="Base Class Member Overrides">
+      <Region.GroupBy>
+        <Override />
+      </Region.GroupBy>
+      <Entry DisplayName="Member Overrides">
+        <Entry.Match>
+          <And>
+            <Kind Is="Member" />
+            <Override />
+          </And>
+        </Entry.Match>
+        <Entry.SortBy>
+          <Override />
+          <Name />
+        </Entry.SortBy>
+      </Entry>
+    </Region>
+    <Region Name="Events">
+      <Entry DisplayName="Entry">
+        <Entry.Match>
+          <Kind Is="Event" />
+        </Entry.Match>
+        <Entry.SortBy>
+          <Access />
+          <Name />
+        </Entry.SortBy>
+      </Entry>
+    </Region>
+    <Region Name="Delegates" Priority="100">
+      <Entry DisplayName="Delegates">
+        <Entry.Match>
+          <Kind Is="Delegate" />
+        </Entry.Match>
+        <Entry.SortBy>
+          <Access Order="Public Protected ProtectedInternal Internal Private" />
+          <Name />
+        </Entry.SortBy>
+      </Entry>
+    </Region>
+    <Entry DisplayName="Properties, Indexers">
+      <Entry.Match>
+        <Or>
+          <Kind Is="Property" />
+          <Kind Is="Indexer" />
+        </Or>
+      </Entry.Match>
+      <Entry.SortBy>
+        <Kind Is="Member" />
+        <Access />
+        <Name />
+      </Entry.SortBy>
+    </Entry>
+    <Entry DisplayName="All Other Members" />
+    <Entry DisplayName="Constants and Static Fields">
+      <Entry.Match>
+        <Or>
+          <Kind Is="Constant" />
+          <And>
+            <Static />
+            <Kind Is="Field" />
+          </And>
+        </Or>
+      </Entry.Match>
+      <Entry.SortBy>
+        <Kind Is="Member" />
+        <Access Order="Public Protected ProtectedInternal Internal Private" />
+        <Name />
+      </Entry.SortBy>
+    </Entry>
+    <Entry DisplayName="Fields">
+      <Entry.Match>
+        <And>
+          <Kind Is="Field" />
+          <Not>
+            <Static />
+          </Not>
+        </And>
+      </Entry.Match>
+      <Entry.SortBy>
+        <Readonly />
+        <Access Order="Public Protected ProtectedInternal Internal Private" />
+        <Name />
+      </Entry.SortBy>
+    </Entry>
+  </TypePattern>
+</Patterns>]]></s:String>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002EMemberReordering_002EMigrations_002ECSharpFileLayoutPatternRemoveIsAttributeUpgrade/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

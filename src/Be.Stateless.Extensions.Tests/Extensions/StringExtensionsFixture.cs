@@ -1,6 +1,6 @@
-﻿#region Copyright & License
+#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2025 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,165 +17,191 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using Moq;
 using Xunit;
 using static FluentAssertions.FluentActions;
 using Range = Moq.Range;
 
-namespace Be.Stateless.Extensions
+namespace Be.Stateless.Extensions;
+
+[SuppressMessage("Naming", "CA1720:Identifier contains type name")]
+[SuppressMessage("Style", "IDE1006:Naming Styles")]
+[SuppressMessage("ReSharper", "InconsistentNaming")]
+public class StringExtensionsFixture
 {
-	public class StringExtensionsFixture
+	[Theory]
+	[InlineData(null, 3, "")]
+	[InlineData("", 3, "")]
+	[InlineData("123456", 3, "123")]
+	[InlineData("123456", 9, "123456")]
+	[SuppressMessage("Usage", "xUnit1012:Null should only be used for nullable parameters")]
+	public void ExtractSubstringTakesPrefix(string @string, int length, string expected)
 	{
-		[Fact]
-		public void IfNotNullOrEmptyDoesNotInvokeActionDelegate()
-		{
-			var @string = string.Empty;
-			var mock = new Mock<Action<string>>();
+		@string.ExtractSubstring(length)
+			.Should()
+			.Be(expected);
+	}
 
-			@string.IfNotNullOrEmpty(mock.Object);
+	[Theory]
+	[InlineData(null, -3, "")]
+	[InlineData("", -3, "")]
+	[InlineData("123456", -3, "456")]
+	[InlineData("123456", -9, "123456")]
+	[SuppressMessage("Usage", "xUnit1012:Null should only be used for nullable parameters")]
+	public void ExtractSubstringTakesSuffix(string @string, int length, string expected)
+	{
+		@string.ExtractSubstring(length)
+			.Should()
+			.Be(expected);
+	}
 
-			mock.Verify(a => a.Invoke(@string), Times.Never);
-		}
+	[Fact]
+	public void IfNotNullOrEmptyDoesNotInvokeActionDelegate()
+	{
+		var @string = string.Empty;
+		var mock = new Mock<Action<string>>();
 
-		[Fact]
-		public void IfNotNullOrEmptyDoesNotInvokeFunctionDelegate()
-		{
-			var @string = string.Empty;
-			var mock = new Mock<Func<string, bool>>();
-			mock.Setup(f => f.Invoke(@string)).Returns(true);
+		@string.IfNotNullOrEmpty(mock.Object);
 
-			@string.IfNotNullOrEmpty(mock.Object).Should().BeFalse();
+		mock.Verify(a => a.Invoke(@string), Times.Never);
+	}
 
-			mock.Verify(a => a.Invoke(@string), Times.Never);
-		}
+	[Fact]
+	public void IfNotNullOrEmptyDoesNotInvokeFunctionDelegate()
+	{
+		var @string = string.Empty;
+		var mock = new Mock<Func<string, bool>>();
+		mock.Setup(f => f.Invoke(@string))
+			.Returns(value: true);
 
-		[Fact]
-		public void IfNotNullOrEmptyInvokesActionDelegate()
-		{
-			const string @string = "anything";
-			var mock = new Mock<Action<string>>();
+		@string.IfNotNullOrEmpty(mock.Object)
+			.Should()
+			.BeFalse();
 
-			@string.IfNotNullOrEmpty(mock.Object);
+		mock.Verify(a => a.Invoke(@string), Times.Never);
+	}
 
-			mock.Verify(a => a.Invoke(@string), Times.Once);
-		}
+	[Fact]
+	public void IfNotNullOrEmptyInvokesActionDelegate()
+	{
+		const string @string = "anything";
+		var mock = new Mock<Action<string>>();
 
-		[Fact]
-		public void IfNotNullOrEmptyInvokesFunctionDelegate()
-		{
-			const string @string = "anything";
-			var mock = new Mock<Func<string, bool>>();
-			mock.Setup(f => f.Invoke(@string)).Returns(true);
+		@string.IfNotNullOrEmpty(mock.Object);
 
-			@string.IfNotNullOrEmpty(mock.Object).Should().BeTrue();
+		mock.Verify(static a => a.Invoke(@string), Times.Once);
+	}
 
-			mock.Verify(a => a.Invoke(@string), Times.Once);
-		}
+	[Fact]
+	public void IfNotNullOrEmptyInvokesFunctionDelegate()
+	{
+		const string @string = "anything";
+		var mock = new Mock<Func<string, bool>>();
+		mock.Setup(static f => f.Invoke(@string))
+			.Returns(value: true);
 
-		[Fact]
-		public void IfNotNullOrWhiteSpaceDoesNotInvokeActionDelegate()
-		{
-			const string @string = "   ";
-			var mock = new Mock<Action<string>>();
+		@string.IfNotNullOrEmpty(mock.Object)
+			.Should()
+			.BeTrue();
 
-			@string.IfNotNullOrWhiteSpace(mock.Object);
+		mock.Verify(static a => a.Invoke(@string), Times.Once);
+	}
 
-			mock.Verify(a => a.Invoke(@string), Times.Never);
-		}
+	[Fact]
+	public void IfNotNullOrWhiteSpaceDoesNotInvokeActionDelegate()
+	{
+		const string @string = "   ";
+		var mock = new Mock<Action<string>>();
 
-		[Fact]
-		public void IfNotNullOrWhiteSpaceDoesNotInvokeFunctionDelegate()
-		{
-			const string @string = "   ";
-			var mock = new Mock<Func<string, bool>>();
-			mock.Setup(f => f.Invoke(@string)).Returns(true);
+		@string.IfNotNullOrWhiteSpace(mock.Object);
 
-			@string.IfNotNullOrWhiteSpace(mock.Object).Should().BeFalse();
+		mock.Verify(static a => a.Invoke(@string), Times.Never);
+	}
 
-			mock.Verify(a => a.Invoke(@string), Times.Never);
-		}
+	[Fact]
+	public void IfNotNullOrWhiteSpaceDoesNotInvokeFunctionDelegate()
+	{
+		const string @string = "   ";
+		var mock = new Mock<Func<string, bool>>();
+		mock.Setup(static f => f.Invoke(@string))
+			.Returns(value: true);
 
-		[Fact]
-		public void IfNotNullOrWhiteSpaceInvokesActionDelegate()
-		{
-			const string @string = "anything";
-			var mock = new Mock<Action<string>>();
+		@string.IfNotNullOrWhiteSpace(mock.Object)
+			.Should()
+			.BeFalse();
 
-			@string.IfNotNullOrWhiteSpace(mock.Object);
+		mock.Verify(static a => a.Invoke(@string), Times.Never);
+	}
 
-			mock.Verify(a => a.Invoke(@string), Times.Once);
-		}
+	[Fact]
+	public void IfNotNullOrWhiteSpaceInvokesActionDelegate()
+	{
+		const string @string = "anything";
+		var mock = new Mock<Action<string>>();
 
-		[Fact]
-		public void IfNotNullOrWhiteSpaceInvokesFunctionDelegate()
-		{
-			const string @string = "anything";
-			var mock = new Mock<Func<string, bool>>();
-			mock.Setup(f => f.Invoke(@string)).Returns(true);
+		@string.IfNotNullOrWhiteSpace(mock.Object);
 
-			@string.IfNotNullOrWhiteSpace(mock.Object).Should().BeTrue();
+		mock.Verify(static a => a.Invoke(@string), Times.Once);
+	}
 
-			mock.Verify(a => a.Invoke(@string), Times.Once);
-		}
+	[Fact]
+	public void IfNotNullOrWhiteSpaceInvokesFunctionDelegate()
+	{
+		const string @string = "anything";
+		var mock = new Mock<Func<string, bool>>();
+		mock.Setup(static f => f.Invoke(@string))
+			.Returns(value: true);
 
-		[Theory]
-		[InlineData(null)]
-		[InlineData("")]
-		[InlineData(@"\name.txt")]
-		[InlineData(@"/name.txt")]
-		public void IsValidFileNameReturnsFalse(string @string)
-		{
-			@string.IsValidFileName().Should().BeFalse();
-		}
+		@string.IfNotNullOrWhiteSpace(mock.Object)
+			.Should()
+			.BeTrue();
 
-		[Theory]
-		[InlineData("name")]
-		[InlineData("name.txt")]
-		[InlineData("name-0.txt")]
-		[InlineData("name_0.txt")]
-		public void IsValidFileNameReturnsTrue(string @string)
-		{
-			@string.IsValidFileName().Should().BeTrue();
-		}
+		mock.Verify(static a => a.Invoke(@string), Times.Once);
+	}
 
-		[Theory]
-		[InlineData("Exclusive", Range.Exclusive)]
-		[InlineData("EXCLUSIVE", Range.Exclusive)]
-		public void ParseEnumLabel(string value, Range expected)
-		{
-			value.Parse<Range>().Should().Be(expected);
-		}
+	[Theory]
+	[InlineData(data: null)]
+	[InlineData("")]
+	[InlineData(@"\name.txt")]
+	[InlineData("/name.txt")]
+	[SuppressMessage("Usage", "xUnit1012:Null should only be used for nullable parameters")]
+	public void IsValidFileNameReturnsFalse(string @string)
+	{
+		@string.IsValidFileName()
+			.Should()
+			.BeFalse();
+	}
 
-		[Fact]
-		public void ParseEnumThrowsWhenLabelIsUnknown()
-		{
-			Invoking(() => "Unknown".Parse<Range>()).Should().Throw<ArgumentException>().WithMessage("Requested value 'Unknown' was not found.");
-		}
+	[Theory]
+	[InlineData("name")]
+	[InlineData("name.txt")]
+	[InlineData("name-0.txt")]
+	[InlineData("name_0.txt")]
+	public void IsValidFileNameReturnsTrue(string @string)
+	{
+		@string.IsValidFileName()
+			.Should()
+			.BeTrue();
+	}
 
-		[Theory]
-		[InlineData(null, 3, "")]
-		[InlineData(null, -3, "")]
-		[InlineData("", 3, "")]
-		[InlineData("", -3, "")]
-		[InlineData("123456", 3, "123")]
-		[InlineData("123456", -3, "456")]
-		[InlineData("123456", 9, "123456")]
-		[InlineData("123456", -9, "123456")]
-		public void SubstringEx(string @string, int length, string expected)
-		{
-			@string.SubstringEx(length).Should().Be(expected);
-		}
+	[Theory]
+	[InlineData("Exclusive", Range.Exclusive)]
+	[InlineData("EXCLUSIVE", Range.Exclusive)]
+	public void ParseEnumLabel(string value, Range expected)
+	{
+		value.Parse<Range>()
+			.Should()
+			.Be(expected);
+	}
 
-		[Theory]
-		[InlineData(null, "")]
-		[InlineData("", "")]
-		[InlineData("123456", "123456")]
-		[InlineData("TonyStark", "tonyStark")]
-		[InlineData("PepperPotts", "pepperPotts")]
-		public void ToCamelCase(string @string, string expected)
-		{
-			@string.ToCamelCase().Should().Be(expected);
-		}
+	[Fact]
+	public void ParseEnumThrowsWhenLabelIsUnknown()
+	{
+		Invoking(static () => "Unknown".Parse<Range>())
+			.Should()
+			.Throw<ArgumentException>()
+			.WithMessage("Requested value 'Unknown' was not found.");
 	}
 }
