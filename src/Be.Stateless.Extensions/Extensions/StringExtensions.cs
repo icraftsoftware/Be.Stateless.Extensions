@@ -1,13 +1,13 @@
 #region Copyright & License
 
 // Copyright © 2012 - 2025 François Chabot
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 // http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,13 +19,15 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace Be.Stateless.Extensions;
 
 [SuppressMessage("Naming", "CA1720:Identifier contains type name")]
-[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
-[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
+[SuppressMessage("ReSharper", "MemberCanBeInternal", Justification = "Public API.")]
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
+[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
 public static class StringExtensions
 {
 	/// <summary>Performs an <see cref="Action{T}"/> delegate on the <paramref name="string"/> if it is not null nor empty.</summary>
@@ -48,6 +50,7 @@ public static class StringExtensions
 	/// The result of the <paramref name="function"/> delegate, or <c>default(TR)</c> if the <paramref name="string"/> is null
 	/// or empty.
 	/// </returns>
+	[return: NotNullIfNotNull(nameof(@string))]
 	public static TR? IfNotNullOrEmpty<TR>(this string? @string, Func<string, TR> function)
 	{
 		ArgumentNullException.ThrowIfNull(function);
@@ -76,6 +79,7 @@ public static class StringExtensions
 	/// The result of the <paramref name="function"/> delegate, or <c>default(TR)</c> if the <paramref name="string"/> is null
 	/// or white space.
 	/// </returns>
+	[return: NotNullIfNotNull(nameof(@string))]
 	public static TR? IfNotNullOrWhiteSpace<TR>(this string? @string, Func<string, TR> function)
 	{
 		ArgumentNullException.ThrowIfNull(function);
@@ -139,9 +143,34 @@ public static class StringExtensions
 	/// Returns an empty string if the input string is null or empty. If the length of the input string is less than
 	/// <c>length</c>, the whole string is returned.
 	/// </remarks>
-	public static string ExtractSubstring(this string @string, int length)
+	public static string ExtractSubstring(this string? @string, int length)
 	{
 		if (@string.IsNullOrEmpty()) return string.Empty;
 		return Math.Abs(length) > @string.Length ? @string : length < 0 ? @string[^-length..] : @string[..length];
+	}
+
+	/// <summary>Validates that a string is not null or empty, throwing an exception if the condition is not met.</summary>
+	/// <param name="string">The string to validate.</param>
+	/// <param name="expression">
+	/// The expression representing the string parameter (automatically captured by the compiler). Used to
+	/// provide a descriptive error message indicating the source of the null or empty string.
+	/// </param>
+	/// <returns>The original non-null and non-empty string.</returns>
+	/// <exception cref="InvalidOperationException">Thrown when the input string is null or empty.</exception>
+	/// <remarks>
+	/// This method is useful for early validation of string parameters, ensuring they have a meaningful value before further
+	/// processing.
+	/// </remarks>
+	/// <example>
+	/// <code>
+	/// string name = null;
+	/// string validName = name.UnlessIsNullOrEmpty(); // Throws InvalidOperationException
+	/// string validString = "Hello".UnlessIsNullOrEmpty(); // Returns "Hello"
+	/// </code>
+	/// </example>
+	public static string UnlessIsNullOrEmpty([NotNull] this string? @string, [CallerArgumentExpression(nameof(@string))] string? expression = null)
+	{
+		if (string.IsNullOrEmpty(@string)) throw new InvalidOperationException($"{expression} is null or empty.");
+		return @string;
 	}
 }
