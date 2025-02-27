@@ -1,13 +1,13 @@
 #region Copyright & License
 
 // Copyright © 2012 - 2025 François Chabot
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 // http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,6 +20,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Be.Stateless.Extensions;
 
@@ -30,6 +31,23 @@ namespace Be.Stateless.Extensions;
 [SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
 public static class StringExtensions
 {
+	/// <summary>
+	/// Extract the first or last <c>length</c> characters of a string, whether <c>length</c> is respectively positive or
+	/// negative.
+	/// </summary>
+	/// <param name="string">The string to extract characters of.</param>
+	/// <param name="length">The number of characters to extract.</param>
+	/// <returns>The substring of the input string.</returns>
+	/// <remarks>
+	/// Returns an empty string if the input string is null or empty. If the length of the input string is less than
+	/// <c>length</c>, the whole string is returned.
+	/// </remarks>
+	public static string ExtractSubstring(this string? @string, int length)
+	{
+		if (@string.IsNullOrEmpty()) return string.Empty;
+		return Math.Abs(length) > @string.Length ? @string : length < 0 ? @string[^-length..] : @string[..length];
+	}
+
 	/// <summary>Performs an <see cref="Action{T}"/> delegate on the <paramref name="string"/> if it is not null nor empty.</summary>
 	/// <param name="string">The string to test and to pass as argument to the <paramref name="action"/> delegate.</param>
 	/// <param name="action">The <see cref="Action{T}"/> delegate to perform.</param>
@@ -132,25 +150,9 @@ public static class StringExtensions
 		return Enum.Parse<T>(value, ignoreCase);
 	}
 
-	/// <summary>
-	/// Extract the first or last <c>length</c> characters of a string, whether <c>length</c> is respectively positive or
-	/// negative.
-	/// </summary>
-	/// <param name="string">The string to extract characters of.</param>
-	/// <param name="length">The number of characters to extract.</param>
-	/// <returns>The substring of the input string.</returns>
-	/// <remarks>
-	/// Returns an empty string if the input string is null or empty. If the length of the input string is less than
-	/// <c>length</c>, the whole string is returned.
-	/// </remarks>
-	public static string ExtractSubstring(this string? @string, int length)
-	{
-		if (@string.IsNullOrEmpty()) return string.Empty;
-		return Math.Abs(length) > @string.Length ? @string : length < 0 ? @string[^-length..] : @string[..length];
-	}
-
 	/// <summary>Validates that a string is not null or empty, throwing an exception if the condition is not met.</summary>
 	/// <param name="string">The string to validate.</param>
+	/// <param name="context">Optional additional context or explanation for the validation failure.</param>
 	/// <param name="expression">
 	/// The expression representing the string parameter (automatically captured by the compiler). Used to
 	/// provide a descriptive error message indicating the source of the null or empty string.
@@ -158,19 +160,25 @@ public static class StringExtensions
 	/// <returns>The original non-null and non-empty string.</returns>
 	/// <exception cref="InvalidOperationException">Thrown when the input string is null or empty.</exception>
 	/// <remarks>
-	/// This method is useful for early validation of string parameters, ensuring they have a meaningful value before further
-	/// processing.
+	/// This method provides a concise way to validate string parameters, ensuring they have a meaningful value before further
+	/// processing, with optional contextual information.
 	/// </remarks>
 	/// <example>
 	/// <code>
 	/// string name = null;
-	/// string validName = name.UnlessIsNullOrEmpty(); // Throws InvalidOperationException
-	/// string validString = "Hello".UnlessIsNullOrEmpty(); // Returns "Hello"
+	/// // throws InvalidOperationException with context
+	/// string validName = name.UnlessIsNullOrEmpty("Creating a new User instance.");
+	/// // returns "Hello"
+	/// string validString = "Hello".UnlessIsNullOrEmpty();
 	/// </code>
 	/// </example>
-	public static string UnlessIsNullOrEmpty([NotNull] this string? @string, [CallerArgumentExpression(nameof(@string))] string? expression = null)
+	public static string UnlessIsNullOrEmpty([NotNull] this string? @string, string? context = null, [CallerArgumentExpression(nameof(@string))] string? expression = null)
 	{
-		if (@string.IsNullOrEmpty()) throw new InvalidOperationException($"{expression} is null or empty.");
-		return @string;
+		// @formatter:wrap_chained_method_calls wrap_if_long
+		if (!@string.IsNullOrEmpty()) return @string;
+		var builder = new StringBuilder();
+		builder.Append(expression).Append(" cannot be null or an empty string.");
+		if (!context.IsNullOrEmpty()) builder.AppendLine().Append(context);
+		throw new InvalidOperationException(builder.ToString());
 	}
 }

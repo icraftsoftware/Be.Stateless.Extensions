@@ -8,6 +8,7 @@
       <ImplicitUsings>disable</ImplicitUsings>
       <LangVersion>default</LangVersion>
       <Nullable>enable</Nullable>
+      <IsPublishable>false</IsPublishable>
    </PropertyGroup>
 
    <PropertyGroup>

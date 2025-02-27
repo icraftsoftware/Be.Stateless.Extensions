@@ -112,7 +112,7 @@
         &lt;Reformat&gt;true&lt;/Reformat&gt;
       &lt;/Language&gt;
       &lt;Language id=&quot;SQL&quot;&gt;
-        &lt;Reformat&gt;true&lt;/Reformat&gt;
+        &lt;Reformat&gt;false&lt;/Reformat&gt;
       &lt;/Language&gt;
       &lt;Language id=&quot;VueExpr&quot;&gt;
         &lt;Reformat&gt;true&lt;/Reformat&gt;

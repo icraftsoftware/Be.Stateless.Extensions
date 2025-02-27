@@ -1,13 +1,13 @@
 #region Copyright & License
 
 // Copyright © 2012 - 2025 François Chabot
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 // http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,6 +18,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Xml.Serialization;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -203,5 +204,34 @@ public class StringExtensionsFixture
 			.Should()
 			.Throw<ArgumentException>()
 			.WithMessage("Requested value 'Unknown' was not found.");
+	}
+
+	[Fact]
+	public void UnlessIsNullOrEmptyDoesNotThrow()
+	{
+		const string value = "anything";
+		value.UnlessIsNullOrEmpty()
+			.Should()
+			.Be(value);
+	}
+
+	[Fact]
+	public void UnlessIsNullOrEmptyThrows()
+	{
+		var name = string.Empty;
+		Invoking(() => name.UnlessIsNullOrEmpty())
+			.Should()
+			.Throw<InvalidOperationException>()
+			.WithMessage($"{nameof(name)} cannot be null or an empty string.");
+	}
+
+	[Fact]
+	public void UnlessIsNullOrEmptyThrowsWithContext()
+	{
+		var xmlRootAttribute = new XmlRootAttribute();
+		Invoking(() => xmlRootAttribute.Namespace.UnlessIsNullOrEmpty("An XML contract must have a namespace."))
+			.Should()
+			.Throw<InvalidOperationException>()
+			.WithMessage("xmlRootAttribute.Namespace cannot be null or an empty string." + Environment.NewLine + "An XML contract must have a namespace.");
 	}
 }
