@@ -19,6 +19,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Be.Stateless.Extensions;
 
@@ -62,6 +63,7 @@ public static class ObjectExtensions
 	/// <summary>Validates that an object is not null, throwing an exception if the object is null.</summary>
 	/// <typeparam name="T">The type of the object being validated.</typeparam>
 	/// <param name="object">The object to validate for non-nullity.</param>
+	/// <param name="context">Optional additional context or explanation for the validation failure.</param>
 	/// <param name="expression">
 	/// The expression representing the object parameter (automatically captured by the compiler). Used to
 	/// provide a descriptive error message indicating the source of the null object.
@@ -72,17 +74,14 @@ public static class ObjectExtensions
 	/// This method provides a concise way to enforce non-null preconditions for objects, preventing null reference scenarios
 	/// and improving code robustness.
 	/// </remarks>
-	/// <example>
-	/// <code>
-	/// MyClass instance = null;
-	/// MyClass validInstance = instance.UnlessIsNull(); // Throws InvalidOperationException
-	/// MyClass existingInstance = new MyClass();
-	/// MyClass result = existingInstance.UnlessIsNull(); // Returns the existing instance
-	/// </code>
-	/// </example>
-	public static T UnlessIsNull<T>([NotNull] this T? @object, [CallerArgumentExpression(nameof(@object))] string? expression = null)
+	public static T UnlessIsNull<T>([NotNull] this T? @object, string? context = null, [CallerArgumentExpression(nameof(@object))] string? expression = null)
 	{
-		if (@object is null) throw new InvalidOperationException($"{expression} is null.");
-		return @object;
+		if (@object is not null) return @object;
+
+		// @formatter:wrap_chained_method_calls wrap_if_long
+		var builder = new StringBuilder();
+		builder.Append(expression).Append(" cannot be null.");
+		if (!context.IsNullOrEmpty()) builder.AppendLine().Append(context);
+		throw new InvalidOperationException(builder.ToString());
 	}
 }

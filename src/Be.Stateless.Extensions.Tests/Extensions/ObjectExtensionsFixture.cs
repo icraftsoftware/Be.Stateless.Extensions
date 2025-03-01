@@ -1,13 +1,13 @@
 #region Copyright & License
 
 // Copyright © 2012 - 2025 François Chabot
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 // http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@ using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using Moq;
 using Xunit;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.Extensions;
 
@@ -78,5 +79,34 @@ public class ObjectExtensionsFixture
 			.BeTrue();
 
 		actionMock.Verify(f => f.Invoke(@object), Times.Once);
+	}
+
+	[Fact]
+	public void UnlessIsNullDoesNotThrow()
+	{
+		var @object = new object();
+		@object.UnlessIsNull()
+			.Should()
+			.BeSameAs(@object);
+	}
+
+	[Fact]
+	public void UnlessIsNullThrows()
+	{
+		object? @object = null;
+		Invoking(() => @object.UnlessIsNull())
+			.Should()
+			.Throw<InvalidOperationException>()
+			.WithMessage($"@{nameof(@object)} cannot be null.");
+	}
+
+	[Fact]
+	public void UnlessIsNullThrowsWithContext()
+	{
+		object? @object = null;
+		Invoking(() => @object.UnlessIsNull("Some context information."))
+			.Should()
+			.Throw<InvalidOperationException>()
+			.WithMessage($"@{nameof(@object)} cannot be null." + Environment.NewLine + "Some context information.");
 	}
 }

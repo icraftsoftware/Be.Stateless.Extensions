@@ -163,19 +163,11 @@ public static class StringExtensions
 	/// This method provides a concise way to validate string parameters, ensuring they have a meaningful value before further
 	/// processing, with optional contextual information.
 	/// </remarks>
-	/// <example>
-	/// <code>
-	/// string name = null;
-	/// // throws InvalidOperationException with context
-	/// string validName = name.UnlessIsNullOrEmpty("Creating a new User instance.");
-	/// // returns "Hello"
-	/// string validString = "Hello".UnlessIsNullOrEmpty();
-	/// </code>
-	/// </example>
 	public static string UnlessIsNullOrEmpty([NotNull] this string? @string, string? context = null, [CallerArgumentExpression(nameof(@string))] string? expression = null)
 	{
-		// @formatter:wrap_chained_method_calls wrap_if_long
 		if (!@string.IsNullOrEmpty()) return @string;
+
+		// @formatter:wrap_chained_method_calls wrap_if_long
 		var builder = new StringBuilder();
 		builder.Append(expression).Append(" cannot be null or an empty string.");
 		if (!context.IsNullOrEmpty()) builder.AppendLine().Append(context);
