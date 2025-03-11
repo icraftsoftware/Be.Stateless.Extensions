@@ -21,7 +21,7 @@ using System.Runtime.CompilerServices;
 
 namespace Be.Stateless.Extensions;
 
-public static class ArgumentOutOfRangeExceptionExtensions
+public static class ArgumentOutOfRangeExceptionFactory
 {
 	/// <summary>Throws an <see cref="System.ArgumentOutOfRangeException"/> if the value is not within the specified range.</summary>
 	/// <typeparam name="T">The type of the value to be compared, which must implement <see cref="IComparable{T}"/>.</typeparam>
@@ -34,15 +34,7 @@ public static class ArgumentOutOfRangeExceptionExtensions
 	/// <paramref name="lowerBound"/> or greater than <paramref name="upperBound"/>.
 	/// </exception>
 	/// <remarks>The method performs an inclusive range check, meaning the value can be equal to either the lower or upper bound.</remarks>
-	/// <example>
-	/// <code>
-	/// int age = 25;
-	/// age.ThrowIfNotBetween(18, 65); // This will not throw an exception
-	/// int invalidAge = 70;
-	/// invalidAge.ThrowIfNotBetween(18, 65); // This will throw an ArgumentOutOfRangeException
-	/// </code>
-	/// </example>
-	public static void ThrowIfOutsideRange<T>(T value, T lowerBound, T upperBound, [CallerArgumentExpression(nameof(value))] string? paramName = null)
+	public static void ThrowIfOutOfBounds<T>(T value, T lowerBound, T upperBound, [CallerArgumentExpression(nameof(value))] string? paramName = null)
 		where T : IComparable<T>
 	{
 		if (value.CompareTo(lowerBound) < 0 || value.CompareTo(upperBound) > 0)
